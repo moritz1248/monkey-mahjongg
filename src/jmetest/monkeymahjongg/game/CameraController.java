@@ -34,6 +34,7 @@ import com.jme.scene.Node;
  * @author Pirx
  */
 class CameraController extends Controller {
+	private static final long serialVersionUID = 1L;
     
     final static float MIN_ANGLE = 1.2f;
     final static float MIN_DISTANCE = 25f;

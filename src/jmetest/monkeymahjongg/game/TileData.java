@@ -65,7 +65,7 @@ import java.io.IOException;
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Class getClassTag() {
+    public Class<?> getClassTag() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

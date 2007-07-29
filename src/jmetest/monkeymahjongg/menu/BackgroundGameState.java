@@ -87,6 +87,7 @@ public class BackgroundGameState extends BasicGameState {
     }
     
     private static class RotController extends Controller {
+		private static final long serialVersionUID = 1L;
 
         private float angle = 0;
         private Spatial s;
