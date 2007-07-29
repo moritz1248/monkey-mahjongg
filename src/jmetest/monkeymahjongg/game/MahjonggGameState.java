@@ -94,7 +94,7 @@ public class MahjonggGameState extends BasicGameState {
         fb.put(border);
         fb.put(border);
         fb.put(border);
-        for (int x = 0; x < level.getWidht(); x++) {
+        for (int x = 0; x < level.getWidth(); x++) {
             for (int y = 0; y < level.getHeight(); y++) {
                 for (int z = 0; z < level.getLayers(); z++) {
                     if (level.isTile(x, y, z)) {
@@ -103,7 +103,7 @@ public class MahjonggGameState extends BasicGameState {
                         tile.setUserData("tile", new TileData(x, y, z, tileId));
                         setState(tile, tileId);
                         rootNode.attachChild(tile);
-                        tile.setLocalTranslation(new Vector3f(dx * (x - level.getWidht() / 2f) - dx / 2, dy * (y - level.getHeight() / 2f) - dy / 2, dz * z));
+                        tile.setLocalTranslation(new Vector3f(dx * (x - level.getWidth() / 2f) - dx / 2, dy * (y - level.getHeight() / 2f) - dy / 2, dz * z));
                         tile.setModelBound(new BoundingBox());
                         tile.updateModelBound();
                         tile.updateRenderState();

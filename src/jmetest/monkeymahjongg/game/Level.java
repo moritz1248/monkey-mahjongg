@@ -85,7 +85,7 @@ public class Level {
         return name;
     }
 
-    public int getWidht() {
+    public int getWidth() {
         return width;
     }
 
