@@ -57,7 +57,7 @@ public class Main {
 
     private static String menuPackage;
     
-    private static String levelName = "standard";
+    private static String layoutName = "standard";
 
     /**
      * @param args the command line arguments
@@ -109,10 +109,6 @@ public class Main {
         System.out.println("settings");
     }
 
-    public static void selectLevelMenu() {
-        System.out.println("level");
-    }
-    
     public static void selectMainMenu() {
         mainMenuGameState.setActive(true);
     }
@@ -123,8 +119,12 @@ public class Main {
         mahjonggGameState.setActive(true);
     }
     
+    public static void setLayoutName(String layoutName) {
+        Main.layoutName = layoutName;
+    }
+    
     public static Level getLevel() {
-        return new Level("level/" + levelName + ".xml");
+        return new Level("level/" + layoutName + ".xml");
     }
 
     public static void exit() {

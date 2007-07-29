@@ -30,6 +30,12 @@ import javax.swing.Action;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import jmetest.monkeymahjongg.Main;
 
 /**
@@ -48,18 +54,6 @@ public class MainMenuGameState extends JMEDesktopState {
 
         public void actionPerformed(ActionEvent e) {
             Main.selectSettingsMenu();
-        }
-    };
-
-    private Action levelAction = new AbstractAction() {
-		private static final long serialVersionUID = 1L;
-        {
-            putValue(NAME, "Level");
-            putValue(SHORT_DESCRIPTION, "Level Button");
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            Main.selectLevelMenu();
         }
     };
 
@@ -88,13 +82,13 @@ public class MainMenuGameState extends JMEDesktopState {
     };
     
     private Action[] actions = new Action[]{
-        settingsAction, levelAction, startAction, exitAction};
+        settingsAction, startAction, exitAction};
 
 
     public MainMenuGameState() {
         super(true);
         JDesktopPane jDesktop = getDesktop().getJDesktop();
-
+        
         for (int i = 0; i < actions.length; i++) {
             JButton button = new JButton(actions[i]);
             button.setSize(100, 20);
@@ -102,8 +96,31 @@ public class MainMenuGameState extends JMEDesktopState {
             jDesktop.add(button);
         }
 
+        JLabel label = new JLabel("Layout");
+        label.setSize(100, 15);
+        label.setLocation(50, 280);
+        label.setOpaque(true);
+        jDesktop.add(label);
+        final JList layoutList = new JList(getLayouts());
+        layoutList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        layoutList.addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent e) {
+                Main.setLayoutName(layoutList.getSelectedValue().toString().toLowerCase());
+            }
+        });
+        layoutList.setSelectedIndex(0);
+        JScrollPane scrollPane = new JScrollPane(layoutList);
+        scrollPane.setSize(100,120);
+        scrollPane.setLocation(50, 300);
+        jDesktop.add(scrollPane);
+        
         jDesktop.invalidate();
         jDesktop.validate();
         jDesktop.repaint();
+    }
+    
+    private String[] getLayouts() {
+        return new String[] 
+           {"Standard", "Block", "Butterfly", "Castle", "Stairs", "Towers"};
     }
 }

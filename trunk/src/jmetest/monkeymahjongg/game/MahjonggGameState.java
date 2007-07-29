@@ -62,7 +62,7 @@ public class MahjonggGameState extends BasicGameState {
 
     private float dx = 3.5f;
     private float dy = 5f;
-    private float dz = 2f;
+    private float dz = 3f;
 
     private Node cameraRotationNode;
     private Node cameraDistanceNode;
@@ -103,7 +103,9 @@ public class MahjonggGameState extends BasicGameState {
                         tile.setUserData("tile", new TileData(x, y, z, tileId));
                         setState(tile, tileId);
                         rootNode.attachChild(tile);
-                        tile.setLocalTranslation(new Vector3f(dx * (x - level.getWidth() / 2f) - dx / 2, dy * (y - level.getHeight() / 2f) - dy / 2, dz * z));
+                        tile.setLocalTranslation(new Vector3f(
+                                dx * (x - level.getWidth() / 2f) - dx / 2, 
+                                dy * (level.getHeight() / 2f - y) - 1.5f*dy, dz * z));
                         tile.setModelBound(new BoundingBox());
                         tile.updateModelBound();
                         tile.updateRenderState();
