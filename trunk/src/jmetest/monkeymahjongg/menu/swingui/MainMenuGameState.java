@@ -39,7 +39,9 @@ import jmetest.monkeymahjongg.Main;
 public class MainMenuGameState extends JMEDesktopState {
 
     private Action settingsAction = new AbstractAction() {
-        {
+		private static final long serialVersionUID = 1L;
+
+		{
             putValue(NAME, "Settings");
             putValue(SHORT_DESCRIPTION, "Settings Button");
         }
@@ -50,6 +52,7 @@ public class MainMenuGameState extends JMEDesktopState {
     };
 
     private Action levelAction = new AbstractAction() {
+		private static final long serialVersionUID = 1L;
         {
             putValue(NAME, "Level");
             putValue(SHORT_DESCRIPTION, "Level Button");
@@ -61,6 +64,7 @@ public class MainMenuGameState extends JMEDesktopState {
     };
 
     private Action startAction = new AbstractAction() {
+		private static final long serialVersionUID = 1L;
         {
             putValue(NAME, "Start");
             putValue(SHORT_DESCRIPTION, "Start Button");
@@ -72,6 +76,7 @@ public class MainMenuGameState extends JMEDesktopState {
     };
 
     private Action exitAction = new AbstractAction() {
+		private static final long serialVersionUID = 1L;
         {
             putValue(NAME, "Exit");
             putValue(SHORT_DESCRIPTION, "Exut Button");
