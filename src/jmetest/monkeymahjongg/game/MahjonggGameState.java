@@ -117,8 +117,18 @@ public class MahjonggGameState extends BasicGameState {
         String tex = "jmetest/monkeymahjongg/images/";
         if (tileId < 36) {
             tex += "banana" + ((tileId / 4) + 1);
+        } else if(tileId < 72) {
+            tex += "numbers" + (((tileId - 36) / 4) + 1);
+        } else if (tileId < 108) {
+            tex += "coconut" + (((tileId - 72) / 4) + 1);
+        } else if (tileId < 124) {
+            tex += "winds" + (((tileId - 108) / 4) + 1);
+        } else if (tileId < 136) {
+            tex += "dragon" + (((tileId - 124) / 4) + 1);
+        } else if (tileId < 140) {
+            tex += "flower" + (tileId - 136 + 1);
         } else {
-            tex += "test";
+            tex += "season" + (tileId - 140 + 1); 
         }
         tex += ".png";
         
