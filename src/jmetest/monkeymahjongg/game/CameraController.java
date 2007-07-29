@@ -35,10 +35,10 @@ import com.jme.scene.Node;
  */
 class CameraController extends Controller {
     
-    final static float MIN_ANGLE = 0.8f;
+    final static float MIN_ANGLE = 1.2f;
     final static float MIN_DISTANCE = 25f;
     final static float MAX_DISTANCE = 150f;
-    final static float SPEED = 1f;
+    final static float SPEED = 2f;
 
     float vAngle = 0;
     float hAngle = 0;

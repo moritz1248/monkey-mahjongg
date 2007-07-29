@@ -25,6 +25,7 @@
 package jmetest.monkeymahjongg.game;
 
 import com.jme.bounding.BoundingBox;
+import com.jme.image.Image;
 import com.jme.image.Texture;
 import com.jme.input.KeyInput;
 import com.jme.input.controls.GameControl;
@@ -114,11 +115,10 @@ public class MahjonggGameState extends BasicGameState {
 
     private void setState(Spatial tile, int tileId) {
         String tex = "jmetest/monkeymahjongg/images/";
-        switch (tileId) {
-            case 0: case 1: case 2: case 3: tex += "banana1"; break;
-            case 4: case 5: case 6: case 7: tex += "banana2"; break;
-            case 8: case 9: case 10: case 11: tex += "banana3"; break;
-            default: tex += "test";
+        if (tileId < 36) {
+            tex += "banana" + ((tileId / 4) + 1);
+        } else {
+            tex += "test";
         }
         tex += ".png";
         
@@ -126,8 +126,9 @@ public class MahjonggGameState extends BasicGameState {
         ms.setEmissive(ColorRGBA.white);
         tile.setRenderState(ms);
         TextureState ts = DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
-        Texture t = TextureManager.loadTexture(BasicGameState.class.getClassLoader().getResource(tex),
-                Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR);
+        Texture t = TextureManager.loadTexture(MahjonggGameState.class.getClassLoader().getResource(tex),
+                Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR, Image.GUESS_FORMAT_NO_S3TC, 
+                ts.getMaxAnisotropic(), true);
         ts.setTexture(t);
         tile.setRenderState(ts);
     }
