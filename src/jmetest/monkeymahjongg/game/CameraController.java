@@ -37,7 +37,7 @@ class CameraController extends Controller {
 	private static final long serialVersionUID = 1L;
     
     final static float MIN_ANGLE = 1.2f;
-    final static float MIN_DISTANCE = 25f;
+    final static float MIN_DISTANCE = 35f;
     final static float MAX_DISTANCE = 150f;
     final static float SPEED = 2f;
 

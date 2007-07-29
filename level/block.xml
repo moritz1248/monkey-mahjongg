@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<mahjongg name="Block" width="17" height="15" layers="2">
+<line data="2 2 2 2 2 2 2 2 2"/>
+<line data=". . . . . . . . ."/>
+<line data="2 2 2 2 2 2 2 2 2"/>
+<line data=". . . . . . . . ."/>
+<line data="2 2 2 2 2 2 2 2 2"/>
+<line data=". . . . . . . . ."/>
+<line data="2 2 2 2 2 2 2 2 2"/>
+<line data=". . . . . . . . ."/>
+<line data="2 2 2 2 2 2 2 2 2"/>
+<line data=". . . . . . . . ."/>
+<line data="2 2 2 2 2 2 2 2 2"/>
+<line data=". . . . . . . . ."/>
+<line data="2 2 2 2 2 2 2 2 2"/>
+<line data=". . . . . . . . ."/>
+<line data="2 2 2 2 2 2 2 2 2"/>
+</mahjongg>
