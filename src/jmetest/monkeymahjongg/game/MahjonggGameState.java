@@ -65,6 +65,8 @@ public class MahjonggGameState extends BasicGameState {
 	private Node cameraRotationNode;
 	private Node cameraDistanceNode;
 	private GameControlManager gameControlManager;
+        
+        private Level level;
 
 	public MahjonggGameState() {
 		super("mahjongg");
@@ -90,6 +92,7 @@ public class MahjonggGameState extends BasicGameState {
 	}
 
 	public void init(Level level) {
+                this.level = level;
 		rootNode.detachAllChildren();
 		rootNode.attachChild(cameraRotationNode);
 		initLight();
@@ -109,7 +112,7 @@ public class MahjonggGameState extends BasicGameState {
 				for (int z = 0; z < level.getLayers(); z++) {
 					if (level.isTile(x, y, z)) {
 						int tileId = level.getTile(x, y, z);
-						SharedMesh tile = new SharedMesh("tile", box);
+						SharedMesh tile = new SharedMesh("tile", box); 
 						tile.setUserData("tile", new TileData(x, y, z, tileId));
 						setState(tile, tileId);
 						rootNode.attachChild(tile);
@@ -179,6 +182,7 @@ public class MahjonggGameState extends BasicGameState {
 		gameControlManager = new GameControlManager();
 		rootNode.addController(new CameraController(this));
 		rootNode.addController(new BackToMenuController(this));
+        rootNode.addController(new MousePickController(this));
 	}
 
 	public Node getCameraRotationNode() {
@@ -188,6 +192,10 @@ public class MahjonggGameState extends BasicGameState {
 	public Node getCameraDistanceNode() {
 		return cameraDistanceNode;
 	}
+        
+        public Level getLevel() {
+            return level;
+        }
 
 	public GameControlManager getGameControlManager() {
 		return gameControlManager;
