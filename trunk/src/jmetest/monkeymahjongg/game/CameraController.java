@@ -36,21 +36,21 @@ import com.jme.math.Quaternion;
 class CameraController extends MahjonggGameController {
 	private static final long serialVersionUID = 1L;
 
-	final static float MIN_ANGLE = 1.2f;
-	final static float MIN_DISTANCE = 35f;
-	final static float MAX_DISTANCE = 150f;
-	final static float SPEED = 2f;
+	private final static float MIN_ANGLE = 1.2f;
+	private final static float MIN_DISTANCE = 35f;
+	private final static float MAX_DISTANCE = 150f;
+	private final static float SPEED = 2f;
 
-	float vAngle = 0;
-	float hAngle = 0;
-	float distance = 100;
+	private float vAngle = 0;
+	private float hAngle = 0;
+	private float distance = 100;
 
-	GameControl left;
-	GameControl right;
-	GameControl up;
-	GameControl down;
-	GameControl forward;
-	GameControl backward;
+	private GameControl left;
+	private GameControl right;
+	private GameControl up;
+	private GameControl down;
+	private GameControl forward;
+	private GameControl backward;
 
 	public CameraController(MahjonggGameState mahjonggGameState) {
 		super( mahjonggGameState );

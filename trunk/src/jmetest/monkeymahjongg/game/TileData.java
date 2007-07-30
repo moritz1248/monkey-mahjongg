@@ -68,5 +68,10 @@ import java.io.IOException;
     public Class<?> getClassTag() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    @Override
+    public String toString() {
+        return String.format("tile %d, x:%d y:%d z:%d", getTileId(), getX(), getY(), getZ());
+    }
 
 }

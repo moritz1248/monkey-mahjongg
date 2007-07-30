@@ -7,6 +7,7 @@ import com.jme.input.controls.GameControl;
 import com.jme.input.controls.binding.KeyboardBinding;
 
 public class BackToMenuController extends MahjonggGameController {
+    
 	private static final long serialVersionUID = 1L;
 	private GameControl control;
 
@@ -19,7 +20,8 @@ public class BackToMenuController extends MahjonggGameController {
 	
 	@Override
 	public void update(float time) {
-		if( control.getValue() > 0 )
+		if( control.getValue() > 0 ) {
 			Main.stopLevel();
+        }    
 	}
 }
