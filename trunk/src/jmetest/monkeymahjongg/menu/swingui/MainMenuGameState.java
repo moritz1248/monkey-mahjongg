@@ -61,7 +61,7 @@ public class MainMenuGameState extends JMEDesktopState {
 		private static final long serialVersionUID = 1L;
         {
             putValue(NAME, "Start");
-            putValue(SHORT_DESCRIPTION, "Start Button");
+            putValue(SHORT_DESCRIPTION, "Starts the game, using the selected layout");
         }
 
         public void actionPerformed(ActionEvent e) {
@@ -73,7 +73,7 @@ public class MainMenuGameState extends JMEDesktopState {
 		private static final long serialVersionUID = 1L;
         {
             putValue(NAME, "Exit");
-            putValue(SHORT_DESCRIPTION, "Exut Button");
+            putValue(SHORT_DESCRIPTION, "Exits this game");
         }
 
         public void actionPerformed(ActionEvent e) {

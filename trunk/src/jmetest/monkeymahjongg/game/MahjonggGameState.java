@@ -21,16 +21,16 @@
  *
  */
 
-
 package jmetest.monkeymahjongg.game;
+
+import java.nio.FloatBuffer;
+
+import jmetest.monkeymahjongg.Main;
 
 import com.jme.bounding.BoundingBox;
 import com.jme.image.Image;
 import com.jme.image.Texture;
-import com.jme.input.KeyInput;
-import com.jme.input.controls.GameControl;
 import com.jme.input.controls.GameControlManager;
-import com.jme.input.controls.binding.KeyboardBinding;
 import com.jme.light.PointLight;
 import com.jme.math.FastMath;
 import com.jme.math.Quaternion;
@@ -48,140 +48,148 @@ import com.jme.scene.state.TextureState;
 import com.jme.system.DisplaySystem;
 import com.jme.util.TextureManager;
 import com.jmex.game.state.BasicGameState;
-import java.nio.FloatBuffer;
-import jmetest.monkeymahjongg.Main;
 
 /**
- *
+ * 
  * @author Pirx
  */
 public class MahjonggGameState extends BasicGameState {
 
-    private static float[] picture = new float[]{0.7f, 0, 0, 0, 0, 1, 0.7f, 1};
-    private static float[] border = new float[]{1, 0, 0.7f, 0, 0.7f, 1, 1, 1};
+	private static float[] picture = new float[] { 0.7f, 0, 0, 0, 0, 1, 0.7f, 1 };
+	private static float[] border = new float[] { 1, 0, 0.7f, 0, 0.7f, 1, 1, 1 };
 
-    private float dx = 3.5f;
-    private float dy = 5f;
-    private float dz = 3f;
+	private float dx = 3.5f;
+	private float dy = 5f;
+	private float dz = 3f;
 
-    private Node cameraRotationNode;
-    private Node cameraDistanceNode;
+	private Node cameraRotationNode;
+	private Node cameraDistanceNode;
+	private GameControlManager gameControlManager;
 
-    public MahjonggGameState() {
-        super("mahjongg");
-        addController();
-    }
+	public MahjonggGameState() {
+		super("mahjongg");
 
-    @Override
-    public void setActive(boolean active) {
-        if (active) {
-            init(Main.getLevel());
-        }
-        super.setActive(active);
-    }
+		Camera camera = DisplaySystem.getDisplaySystem().getRenderer()
+				.getCamera();
+		cameraRotationNode = new Node("camRotation");
+		cameraDistanceNode = new CameraNode("camDistance", camera);
+		cameraRotationNode.attachChild(cameraDistanceNode);
+		cameraDistanceNode.setLocalTranslation(new Vector3f(0, 0, 100f));
+		cameraDistanceNode.setLocalRotation(new Quaternion()
+				.fromAngleNormalAxis(FastMath.PI, new Vector3f(0, 1, 0)));
 
-    public void init(Level level) {
-        rootNode.detachAllChildren();
-        rootNode.attachChild(cameraRotationNode);
-        initLight();
+		addControllers();
+	}
 
-        Box box = new Box("box", new Vector3f(), new Vector3f(2 * dx, 2 * dy, dz));
-        FloatBuffer fb = box.getTextureBuffer(0, 0);
-        fb.rewind();
-        fb.put(picture);
-        fb.put(border);
-        fb.put(picture);
-        fb.put(border);
-        fb.put(border);
-        fb.put(border);
-        for (int x = 0; x < level.getWidth(); x++) {
-            for (int y = 0; y < level.getHeight(); y++) {
-                for (int z = 0; z < level.getLayers(); z++) {
-                    if (level.isTile(x, y, z)) {
-                        int tileId = level.getTile(x, y, z);
-                        SharedMesh tile = new SharedMesh("tile", box);
-                        tile.setUserData("tile", new TileData(x, y, z, tileId));
-                        setState(tile, tileId);
-                        rootNode.attachChild(tile);
-                        tile.setLocalTranslation(new Vector3f(
-                                dx * (x - level.getWidth() / 2f) - dx / 2, 
-                                dy * (level.getHeight() / 2f - y) - 1.5f*dy, dz * z));
-                        tile.setModelBound(new BoundingBox());
-                        tile.updateModelBound();
-                        tile.updateRenderState();
-                    }
-                }
-            }
-        }
-    }
+	@Override
+	public void setActive(boolean active) {
+		if (active) {
+			init(Main.getLevel());
+		}
+		super.setActive(active);
+	}
 
-    private void setState(Spatial tile, int tileId) {
-        String tex = "jmetest/monkeymahjongg/images/";
-        if (tileId < 36) {
-            tex += "banana" + ((tileId / 4) + 1);
-        } else if(tileId < 72) {
-            tex += "numbers" + (((tileId - 36) / 4) + 1);
-        } else if (tileId < 108) {
-            tex += "coconut" + (((tileId - 72) / 4) + 1);
-        } else if (tileId < 124) {
-            tex += "winds" + (((tileId - 108) / 4) + 1);
-        } else if (tileId < 136) {
-            tex += "dragon" + (((tileId - 124) / 4) + 1);
-        } else if (tileId < 140) {
-            tex += "flower" + (tileId - 136 + 1);
-        } else {
-            tex += "season" + (tileId - 140 + 1); 
-        }
-        tex += ".png";
-        
-        MaterialState ms = DisplaySystem.getDisplaySystem().getRenderer().createMaterialState();
-        ms.setEmissive(ColorRGBA.white);
-        tile.setRenderState(ms);
-        TextureState ts = DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
-        Texture t = TextureManager.loadTexture(MahjonggGameState.class.getClassLoader().getResource(tex),
-                Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR, Image.GUESS_FORMAT_NO_S3TC, 
-                ts.getMaxAnisotropic(), true);
-        ts.setTexture(t);
-        tile.setRenderState(ts);
-    }
+	public void init(Level level) {
+		rootNode.detachAllChildren();
+		rootNode.attachChild(cameraRotationNode);
+		initLight();
 
-    private void initLight() {
-        PointLight light = new PointLight();
-        light.setDiffuse(new ColorRGBA(0.55f, 0.55f, 0.55f, 1.0f));
-        light.setAmbient(new ColorRGBA(0.05f, 0.05f, 0.05f, 1.0f));
-        light.setLocation(new Vector3f(100, 100, 100));
-        light.setEnabled(true);
+		Box box = new Box("box", new Vector3f(), new Vector3f(2 * dx, 2 * dy,
+				dz));
+		FloatBuffer fb = box.getTextureBuffer(0, 0);
+		fb.rewind();
+		fb.put(picture);
+		fb.put(border);
+		fb.put(picture);
+		fb.put(border);
+		fb.put(border);
+		fb.put(border);
+		for (int x = 0; x < level.getWidth(); x++) {
+			for (int y = 0; y < level.getHeight(); y++) {
+				for (int z = 0; z < level.getLayers(); z++) {
+					if (level.isTile(x, y, z)) {
+						int tileId = level.getTile(x, y, z);
+						SharedMesh tile = new SharedMesh("tile", box);
+						tile.setUserData("tile", new TileData(x, y, z, tileId));
+						setState(tile, tileId);
+						rootNode.attachChild(tile);
+						tile.setLocalTranslation(new Vector3f(dx
+								* (x - level.getWidth() / 2f) - dx / 2, dy
+								* (level.getHeight() / 2f - y) - 1.5f * dy, dz
+								* z));
+						tile.setModelBound(new BoundingBox());
+						tile.updateModelBound();
+						tile.updateRenderState();
+					}
+				}
+			}
+		}
+	}
 
-        /** Attach the light to a lightState and the lightState to rootNode. */
-        LightState lightState = DisplaySystem.getDisplaySystem().getRenderer().createLightState();
-        lightState.setEnabled(true);
-        lightState.attach(light);
-        rootNode.setRenderState(lightState);
-        rootNode.updateRenderState();
-    }
+	private void setState(Spatial tile, int tileId) {
+		String tex = "jmetest/monkeymahjongg/images/";
+		if (tileId < 36) {
+			tex += "banana" + ((tileId / 4) + 1);
+		} else if (tileId < 72) {
+			tex += "numbers" + (((tileId - 36) / 4) + 1);
+		} else if (tileId < 108) {
+			tex += "coconut" + (((tileId - 72) / 4) + 1);
+		} else if (tileId < 124) {
+			tex += "winds" + (((tileId - 108) / 4) + 1);
+		} else if (tileId < 136) {
+			tex += "dragon" + (((tileId - 124) / 4) + 1);
+		} else if (tileId < 140) {
+			tex += "flower" + (tileId - 136 + 1);
+		} else {
+			tex += "season" + (tileId - 140 + 1);
+		}
+		tex += ".png";
 
-    public void addController() {
-        GameControlManager manager = new GameControlManager();
-        Camera camera = DisplaySystem.getDisplaySystem().getRenderer().getCamera();
-        cameraRotationNode = new Node("camRotation");
-        cameraDistanceNode = new CameraNode("camDistance", camera);
-        cameraRotationNode.attachChild(cameraDistanceNode);
-        cameraDistanceNode.setLocalTranslation(new Vector3f(0, 0, 100f));
-        cameraDistanceNode.setLocalRotation(new Quaternion().fromAngleNormalAxis(FastMath.PI, new Vector3f(0, 1, 0)));
+		MaterialState ms = DisplaySystem.getDisplaySystem().getRenderer()
+				.createMaterialState();
+		ms.setEmissive(ColorRGBA.white);
+		tile.setRenderState(ms);
+		TextureState ts = DisplaySystem.getDisplaySystem().getRenderer()
+				.createTextureState();
+		Texture t = TextureManager.loadTexture(MahjonggGameState.class
+				.getClassLoader().getResource(tex), Texture.MM_LINEAR_LINEAR,
+				Texture.FM_LINEAR, Image.GUESS_FORMAT_NO_S3TC, ts
+						.getMaxAnisotropic(), true);
+		ts.setTexture(t);
+		tile.setRenderState(ts);
+	}
 
-        GameControl left = manager.addControl("left");
-        left.addBinding(new KeyboardBinding(KeyInput.KEY_LEFT));
-        GameControl right = manager.addControl("right");
-        right.addBinding(new KeyboardBinding(KeyInput.KEY_RIGHT));
-        GameControl up = manager.addControl("up");
-        up.addBinding(new KeyboardBinding(KeyInput.KEY_UP));
-        GameControl down = manager.addControl("down");
-        down.addBinding(new KeyboardBinding(KeyInput.KEY_DOWN));
-        GameControl forward = manager.addControl("forward");
-        forward.addBinding(new KeyboardBinding(KeyInput.KEY_PGUP));
-        GameControl backward = manager.addControl("backward");
-        backward.addBinding(new KeyboardBinding(KeyInput.KEY_PGDN));
+	private void initLight() {
+		PointLight light = new PointLight();
+		light.setDiffuse(new ColorRGBA(0.55f, 0.55f, 0.55f, 1.0f));
+		light.setAmbient(new ColorRGBA(0.05f, 0.05f, 0.05f, 1.0f));
+		light.setLocation(new Vector3f(100, 100, 100));
+		light.setEnabled(true);
 
-        rootNode.addController(new CameraController(left, right, up, down, forward, backward, cameraRotationNode, cameraDistanceNode));
-    }
+		/** Attach the light to a lightState and the lightState to rootNode. */
+		LightState lightState = DisplaySystem.getDisplaySystem().getRenderer()
+				.createLightState();
+		lightState.setEnabled(true);
+		lightState.attach(light);
+		rootNode.setRenderState(lightState);
+		rootNode.updateRenderState();
+	}
+
+	public void addControllers() {
+		gameControlManager = new GameControlManager();
+		rootNode.addController(new CameraController(this));
+		rootNode.addController(new BackToMenuController(this));
+	}
+
+	public Node getCameraRotationNode() {
+		return cameraRotationNode;
+	}
+
+	public Node getCameraDistanceNode() {
+		return cameraDistanceNode;
+	}
+
+	public GameControlManager getGameControlManager() {
+		return gameControlManager;
+	}
 }
