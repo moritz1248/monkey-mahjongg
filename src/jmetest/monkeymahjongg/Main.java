@@ -119,6 +119,13 @@ public class Main {
         mahjonggGameState.setActive(true);
     }
     
+    public static void stopLevel() {
+        mainMenuGameState.setActive(true);
+        backgroundGameState.setActive(true);
+        mahjonggGameState.setActive(false);
+    }
+    
+    
     public static void setLayoutName(String layoutName) {
         Main.layoutName = layoutName;
     }
