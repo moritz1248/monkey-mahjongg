@@ -13,6 +13,8 @@ public class Board {
 	Vector<TileGroup> availableGroups = new Vector<TileGroup>();
 	Vector<TileGroup> satisfiedGroups = new Vector<TileGroup>();
 	private int groupCount;
+	private Tile selectedTile = null;
+	private int score;
 
 	public Board(int width, int height, int depth) {
 		tiles = new Tile[width][height][depth];
@@ -133,5 +135,51 @@ public class Board {
 				}
 			}
 		}
+	}
+	
+	public boolean selectTile( Tile tile )
+	{
+		if( tile.isBlocked() )
+			return false;
+		if( selectedTile != null )
+		{
+			if( selectedTile == tile )
+			{
+				// unselect tile
+				setSelectedTile( null );
+			}
+			else
+			{
+				if( selectedTile.matches(tile))
+				{
+					// remove tiles
+					selectedTile.remove();
+					tile.remove();
+					score++;
+				}
+				else
+				{
+					setSelectedTile(null);
+					return false;
+				}
+			}
+		}
+		else
+			selectedTile = tile;
+		return true;
+	}
+
+	private void setSelectedTile(Tile tile) {
+		selectedTile = tile;
+		callSelectionListeners();
+	}
+
+	private void callSelectionListeners() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int getScore() {
+		return score;
 	}
 }

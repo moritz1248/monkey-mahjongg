@@ -23,6 +23,12 @@ public class Tile {
 
 	public void remove() {
 		owner.remove(this);
+		callRemoveListeners();
+	}
+
+	private void callRemoveListeners() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public int getX() {
