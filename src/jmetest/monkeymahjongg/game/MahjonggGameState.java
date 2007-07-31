@@ -54,6 +54,8 @@ import com.jmex.game.state.BasicGameState;
  * @author Pirx
  */
 public class MahjonggGameState extends BasicGameState {
+    
+    public static String TILE_USER_DATA = "tile";
 
 	private static float[] picture = new float[] { 0.7f, 0, 0, 0, 0, 1, 0.7f, 1 };
 	private static float[] border = new float[] { 1, 0, 0.7f, 0, 0.7f, 1, 1, 1 };
@@ -113,7 +115,7 @@ public class MahjonggGameState extends BasicGameState {
 					if (level.isTile(x, y, z)) {
 						int tileId = level.getTile(x, y, z);
 						SharedMesh tile = new SharedMesh("tile", box);
-						tile.setUserData("tile", new TileData(x, y, z, tileId));
+						tile.setUserData(TILE_USER_DATA, new TileData(x, y, z, tileId));
 						setState(tile, tileId);
 						rootNode.attachChild(tile);
 						tile.setLocalTranslation(new Vector3f(dx

@@ -63,7 +63,6 @@ public class MousePickController extends MahjonggGameController {
         if (released && pick.getValue() > 0) {
             released = false;
             MouseInput mouseInput = MouseInput.get();
-            //@todo: the following line doesn't work right...
             Vector2f screenPos = new Vector2f(mouseInput.getXAbsolute(),
                                               mouseInput.getYAbsolute());
 			Vector3f worldCoords0 = DisplaySystem.getDisplaySystem().getWorldCoordinates(screenPos, 0);
@@ -75,10 +74,7 @@ public class MousePickController extends MahjonggGameController {
 
             if (pr.getNumber() > 0) {
 				GeomBatch gb = pr.getPickData(0).getTargetMesh();
-                Object o = gb.getParentGeom().getUserData("tile");
-                if (o instanceof TileData) {
-                    System.err.println(o);
-                }
+                mahjonggGameState.getLevel().picked(gb.getParentGeom());
 			}
         }
     }

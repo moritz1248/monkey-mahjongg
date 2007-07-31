@@ -24,6 +24,7 @@
 
 package jmetest.monkeymahjongg.game;
 
+import com.jme.scene.Geometry;
 import com.sun.org.apache.xerces.internal.parsers.SAXParser;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,11 +43,15 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class Level {
 
+    private final static int EMPTY = -1;
+    
     private String name;
     private int width;
     private int height;
     private int layers;
     private int[][][] tiles;
+    
+    private Geometry selectedGeometry;
 
     public Level(String fileName) {
         try {
@@ -60,18 +65,87 @@ public class Level {
             System.exit(-1);
         }
     }
+    
+    private TileData getSelectedTile() {
+        return getTileData(selectedGeometry);
+    }
+    
+    private TileData getTileData(Geometry geometry) {
+        if (geometry == null) {
+            return null;
+        }
+        Object userData = geometry.getUserData(MahjonggGameState.TILE_USER_DATA);
+        return userData instanceof TileData ? (TileData) userData : null;
+    }
+    
+    void picked(Geometry geometry) {
+        TileData tileData = getTileData(geometry);
+        TileData selectedTile = getSelectedTile();
+       if (selectedTile != null && tileData.getTileId() == selectedTile.getTileId()) {  //same tile -> unselect
+           System.err.println("unselect " + selectedTile);
+           selectedGeometry = null;
+           //unselect(geometry);
+       } else if (! isBlocked(tileData)) {
+           if  (selectedGeometry == null) { //new selection
+               System.err.println("select " + tileData);
+               selectedGeometry = geometry;
+              //select(geometry);
+           } else if ((tileData.getTileId() ^ selectedTile.getTileId()) < 4) {  //matching tiles
+               System.err.println("matching new " + tileData + " and selected " + selectedTile);
+              //vaporize(geometry);
+              //vaporize(selectedGeometry);
+               selectedGeometry.removeFromParent();
+               geometry.removeFromParent();
+               selectedGeometry = null;
+               
+               tiles[tileData.getX()][tileData.getY()][tileData.getZ()] = EMPTY;
+               tiles[selectedTile.getX()][selectedTile.getY()][selectedTile.getZ()] = EMPTY;
+           } else {
+               System.err.println("not matching");
+           }   
+       } else {
+           System.err.println("blocked");
+       }     
+    }
+
+    private boolean isBlocked(TileData tileData) {
+        int tx = tileData.getX();
+        int ty = tileData.getY();
+        int tz = tileData.getZ();
+
+        //check for tiles on top
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                if (isTile(tx + x,ty + y, tz + 1)) {
+                    return true;
+                }
+            }
+        }
+        //check if left is free
+        if (! isTile(tx - 2, ty - 1, tz) && ! isTile(tx - 2, ty, tz) 
+                && ! isTile(tx - 2, ty + 1, tz)) {
+            return false;
+        }
+        //check if rightis free
+        if (! isTile(tx + 2, ty - 1, tz) && ! isTile(tx + 2, ty, tz) 
+                && ! isTile(tx + 2, ty + 1, tz)) {
+            return false;
+        }
+        //blocked from both sides
+        return true;
+    }    
 
     public boolean isTile(int x, int y, int z) {
         if (x < 0 || y < 0 || z < 0 || x >= width || y >= height || z >= layers) {
             return false;
         } else {
-            return tiles[x][y][z] != -1;
+            return tiles[x][y][z] != EMPTY;
         }
     }
 
     public int getTile(int x, int y, int z) {
         if (x < 0 || y < 0 || z < 0 || x >= width || y >= height || z >= layers) {
-            return -1;
+            return EMPTY;
         } else {
             return tiles[x][y][z];
         }
@@ -119,7 +193,7 @@ public class Level {
                 tiles = new int[width][height][layers];
                 for (int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
-                        Arrays.fill(tiles[x][y], -1);
+                        Arrays.fill(tiles[x][y], EMPTY);
                     }
                 }
             } else if ("line".equals(qName)) {
