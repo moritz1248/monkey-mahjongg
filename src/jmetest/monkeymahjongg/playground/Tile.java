@@ -13,7 +13,11 @@ public class Tile {
 	}
 
 	public boolean isBlocked() {
-		if (owner.getTile(x, y, z + 1) != null)
+		if (owner.getTile(x, y, z + 1) != null
+				&& owner.getTile(x, y - 1, z + 1) != null
+				&& owner.getTile(x, y + 1, z + 1) != null
+				&& owner.getTile(x - 1, y, z + 1) != null
+				&& owner.getTile(x + 1, y, z + 1) != null)
 			return true;
 		if (owner.getTile(x - 1, y, z) != null
 				&& owner.getTile(x + 1, y, z) != null)
