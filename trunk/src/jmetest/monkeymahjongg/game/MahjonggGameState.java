@@ -42,6 +42,7 @@ import com.jme.scene.Node;
 import com.jme.scene.SharedMesh;
 import com.jme.scene.Spatial;
 import com.jme.scene.shape.Box;
+import com.jme.scene.shape.RoundedBox;
 import com.jme.scene.state.LightState;
 import com.jme.scene.state.MaterialState;
 import com.jme.scene.state.TextureState;
@@ -57,12 +58,37 @@ public class MahjonggGameState extends BasicGameState {
     
     public static String TILE_USER_DATA = "tile";
 
-	private static float[] picture = new float[] { 0.7f, 0, 0, 0, 0, 1, 0.7f, 1 };
-	private static float[] border = new float[] { 1, 0, 0.7f, 0, 0.7f, 1, 1, 1 };
+	//private static float[] picture = new float[] { 0.7f, 0, 0, 0, 0, 1, 0.7f, 1 };
+	//private static float[] border = new float[] { 1, 0, 0.7f, 0, 0.7f, 1, 1, 1 };
 
+    private static float BORDER = 0.2f;
+    private static float SLOPE = 0.1f;
+    private static float RATIO = 0.5f * BORDER / (1 + SLOPE);
+    private static float TEX = 0.7f;
+
+	private static float[] picture = new float[] { 
+        TEX, 0,
+        0, 0, 
+        TEX, 1, 
+        0, 1,
+        TEX*(1-RATIO), RATIO,
+        TEX*RATIO, RATIO,
+        TEX*(1-RATIO), 1-RATIO,
+        TEX*RATIO, 1-RATIO};
+    
+	private static float[] border = new float[] { 
+        1, 0,
+        TEX, 0, 
+        1, 1,
+        TEX, 1, 
+        1 - (1-TEX)*RATIO, RATIO,
+        TEX + (1-TEX)*RATIO, RATIO,
+        1 - (1-TEX)*RATIO, 1-RATIO,
+        TEX + (1-TEX)*RATIO, 1-RATIO};
+    
 	private float dx = 3.5f;
 	private float dy = 5f;
-	private float dz = 3f;
+	private float dz = 1.5f;
 
 	private Node cameraRotationNode;
 	private Node cameraDistanceNode;
@@ -99,7 +125,7 @@ public class MahjonggGameState extends BasicGameState {
 		rootNode.attachChild(cameraRotationNode);
 		initLight();
 
-		Box box = new Box("box", new Vector3f(), new Vector3f(2 * dx, 2 * dy,
+		/*Box box = new Box("box", new Vector3f(), new Vector3f(2 * dx, 2 * dy,
 				dz));
 		FloatBuffer fb = box.getTextureBuffer(0, 0);
 		fb.rewind();
@@ -108,7 +134,19 @@ public class MahjonggGameState extends BasicGameState {
 		fb.put(picture);
 		fb.put(border);
 		fb.put(border);
+		fb.put(border);*/
+        
+        Vector3f size = new Vector3f(dx, dy, dz);
+        RoundedBox box = new RoundedBox("box", size, size.mult(BORDER), size.mult(SLOPE));  
+		FloatBuffer fb = box.getTextureBuffer(0, 0);
+		fb.rewind();
 		fb.put(border);
+		fb.put(picture);
+		fb.put(border);
+		fb.put(picture);
+		fb.put(border);
+		fb.put(border);
+        
 		for (int x = 0; x < level.getWidth(); x++) {
 			for (int y = 0; y < level.getHeight(); y++) {
 				for (int z = 0; z < level.getLayers(); z++) {
@@ -118,10 +156,10 @@ public class MahjonggGameState extends BasicGameState {
 						tile.setUserData(TILE_USER_DATA, new TileData(x, y, z, tileId));
 						setState(tile, tileId);
 						rootNode.attachChild(tile);
-						tile.setLocalTranslation(new Vector3f(dx
-								* (x - level.getWidth() / 2f) - dx / 2, dy
-								* (level.getHeight() / 2f - y) - 1.5f * dy, dz
-								* z));
+						tile.setLocalTranslation(new Vector3f(
+                                dx	* (x - level.getWidth() / 2f) + dx / 2, 
+                                dy * (level.getHeight() / 2f - y) - 0.5f * dy, 
+                                2 * dz * z));
 						tile.setModelBound(new BoundingBox());
 						tile.updateModelBound();
 						tile.updateRenderState();
