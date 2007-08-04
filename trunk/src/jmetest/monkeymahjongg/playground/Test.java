@@ -1,23 +1,19 @@
 package jmetest.monkeymahjongg.playground;
 
-import java.util.Vector;
-
 public class Test {
 
 	private static final class GUITile implements ITileListener {
 		private Tile tile;
-		public static Vector<GUITile> guiTiles = new Vector<GUITile>();
 
 		public GUITile(Tile tile) {
 			this.tile = tile;
-			guiTiles.add(this);
 		}
 
 		@Override
 		public void removed(Tile tile) {
 			System.out.println("Tile " + tile + " removed "
 					+ tile.getGroup().getTextureResource(tile));
-			guiTiles.remove(this);
+			tile.setTileListener(null);
 		}
 
 		@Override

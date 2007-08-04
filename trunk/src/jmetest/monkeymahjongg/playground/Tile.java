@@ -14,6 +14,7 @@ public class Tile extends Coord {
 
 	/**
 	 * This function checks, if a tile is blocked by others
+	 * 
 	 * @return true if it is blocked
 	 */
 	public boolean isBlocked() {
@@ -71,8 +72,9 @@ public class Tile extends Coord {
 	}
 
 	/**
-	 * Selects this tile. 
-	 * @return true if tile is either selected, unselected or removed 
+	 * Selects this tile.
+	 * 
+	 * @return true if tile is either selected, unselected or removed
 	 */
 	public boolean select() {
 		return owner.selectTile(this);
@@ -102,7 +104,8 @@ public class Tile extends Coord {
 	 * Sets the tile listener. The tile-listener gets informed of removal and
 	 * selection of this tile
 	 * 
-	 * @param tileListener an ITileListener implementation
+	 * @param tileListener
+	 *            an ITileListener implementation
 	 */
 	public void setTileListener(ITileListener tileListener) {
 		this.tileListener = tileListener;
@@ -125,5 +128,9 @@ public class Tile extends Coord {
 			if (tile != null && tile != this)
 				rc.add(tile);
 		return rc;
+	}
+
+	public String getTextureResource() {
+		return group.getTextureResource(this);
 	}
 }
