@@ -46,7 +46,7 @@ public class Tile extends Coord {
 	}
 
 
-	public boolean matches(Tile tile) {
+	protected boolean matches(Tile tile) {
 		return tile.getGroup().equals(group);
 	}
 
@@ -54,7 +54,7 @@ public class Tile extends Coord {
 		return group;
 	}
 
-	public void setGroup(TileGroup group) {
+	protected void setGroup(TileGroup group) {
 		this.group = group;
 	}
 
@@ -62,12 +62,12 @@ public class Tile extends Coord {
 		return owner.selectTile(this);
 	}
 
-	public void removed() {
+	protected void removed() {
 		if( tileListener != null )
 			tileListener.removed(this);
 	}
 
-	public void selected(boolean selection) {
+	protected void selected(boolean selection) {
 		if( tileListener != null )
 			tileListener.selected(this, selection);
 	}

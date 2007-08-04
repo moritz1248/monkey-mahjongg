@@ -9,14 +9,14 @@ public abstract class TileGroup {
 		super();
 	}
 
-	public boolean assignTo(Tile tile) {
+	protected boolean assignTo(Tile tile) {
 		tile.setGroup( this );
 		tiles[refCount] = tile;
 		refCount++;
 		return refCount < 4;
 	}
 
-	public void remove(Tile tile) {
+	protected void remove(Tile tile) {
 		for( int i=0; i<4; ++i )
 		{
 			if( tiles[i] == tile )
