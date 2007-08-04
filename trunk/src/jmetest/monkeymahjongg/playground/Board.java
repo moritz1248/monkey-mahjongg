@@ -22,16 +22,39 @@ public class Board {
 		this.height = height;
 		this.depth = depth;
 
+		loadTileGroups();
+	}
+
+	private void loadTileGroups() {
+		Vector<String> extended = new Vector<String>();
+
 		String imageDirectory = "jmetest/monkeymahjongg/images/";
 		URL dirURL = getClass().getClassLoader().getResource(imageDirectory);
 		File dir = new File(dirURL.getFile());
 		if (dir.exists()) {
 			String files[] = dir.list();
 			for (String file : files) {
-				TileGroup tg = new TileGroup(imageDirectory + "/" + file);
+				TileGroup tg = null;
+				String prefix = getExtendedPrefix(file);
+				if (prefix != null) {
+					if (!extended.contains(prefix)) {
+						tg = new ExtendedTileGroup(imageDirectory, prefix);
+						extended.add(prefix);
+					}
+				} else
+					tg = new SimpleTileGroup(imageDirectory + "/" + file);
+
 				availableGroups.add(tg);
 			}
 		}
+	}
+
+	private String getExtendedPrefix(String file) {
+		if (file.startsWith("flower"))
+			return "flower";
+		else if (file.startsWith("season"))
+			return "season";
+		return null;
 	}
 
 	public Tile getTile(int x, int y, int z) {
@@ -45,7 +68,7 @@ public class Board {
 				&& (z >= 0 || z < depth);
 	}
 
-	public void setTile(int x, int y, int z, Tile tile) {
+	private void setTile(int x, int y, int z, Tile tile) {
 		if (isValid(x, y, z))
 			tiles[x][y][z] = tile;
 		if (tile != null && tile.getGroup() == null)
@@ -53,30 +76,29 @@ public class Board {
 	}
 
 	private void assignGroup(Tile tile) {
-		if( availableGroups.size() == 0 )
-			throw new RuntimeException( "no more available groups" );
+		if (availableGroups.size() == 0)
+			throw new RuntimeException("no more available groups");
 		int groupPos = (int) (Math.random() * availableGroups.size());
 		TileGroup tg = availableGroups.elementAt(groupPos);
 		if (!tg.assignTo(tile)) {
 			availableGroups.remove(tg);
-			tg.reset();
 			satisfiedGroups.add(tg);
 		}
 	}
 
-	public void remove(Tile tile) {
+	protected void remove(Tile tile) {
 		setTile(tile.getX(), tile.getY(), tile.getZ(), null);
+		tile.removed();
 	}
 
 	public void addTile(int x, int y, int z) {
-		Tile tile = new Tile(this,x,y,z);
+		Tile tile = new Tile(this, x, y, z);
 		setTile(x, y, z, tile);
 	}
 
 	public void setGroupCount(int count) {
 		groupCount = count;
-		for( int i=availableGroups.size()-1; i>=groupCount; --i)
-		{
+		for (int i = availableGroups.size() - 1; i >= groupCount; --i) {
 			satisfiedGroups.add(availableGroups.elementAt(i));
 			availableGroups.remove(i);
 		}
@@ -84,16 +106,14 @@ public class Board {
 
 	public int missingTileCount() {
 		int rc = 0;
-		if( availableGroups.size() == 0 )
+		if (availableGroups.size() == 0)
 			return 0;
-		else
-		{
-			if( satisfiedGroups.size() == groupCount )
+		else {
+			if (satisfiedGroups.size() == groupCount)
 				return 0;
-			
-			for( TileGroup tg : availableGroups )
-			{
-				if( tg.refCount != 0 )
+
+			for (TileGroup tg : availableGroups) {
+				if (tg.refCount != 0)
 					rc += 4 - tg.refCount;
 			}
 		}
@@ -111,21 +131,20 @@ public class Board {
 	public int getDepth() {
 		return depth;
 	}
-	
-	public static int countTiles( int[][][] layers )
-	{
+
+	public static int countTiles(int[][][] layers) {
 		int count = 0;
 		for (int z = 0; z < layers.length; ++z) {
 			for (int y = 0; y < layers[z].length; ++y) {
 				for (int x = 0; x < layers[z][y].length; ++x) {
-					if( layers[z][y][x] == 1 )
+					if (layers[z][y][x] == 1)
 						count++;
 				}
 			}
 		}
 		return count;
 	}
-	
+
 	public void addTiles(int[][][] layers) {
 		for (int z = 0; z < layers.length; ++z) {
 			for (int y = 0; y < layers[z].length; ++y) {
@@ -136,48 +155,38 @@ public class Board {
 			}
 		}
 	}
-	
-	public boolean selectTile( Tile tile )
-	{
-		if( tile.isBlocked() )
+
+	protected boolean selectTile(Tile tile) {
+		if (tile.isBlocked())
 			return false;
-		if( selectedTile != null )
-		{
-			if( selectedTile == tile )
-			{
+		if (selectedTile != null) {
+			if (selectedTile == tile) {
 				// unselect tile
-				setSelectedTile( null );
-			}
-			else
-			{
-				if( selectedTile.matches(tile))
-				{
+				setSelectedTile(null);
+			} else {
+				if (selectedTile.matches(tile)) {
 					// remove tiles
 					selectedTile.remove();
 					tile.remove();
 					score++;
-				}
-				else
-				{
+				} else {
 					setSelectedTile(null);
 					return false;
 				}
 			}
-		}
-		else
-			selectedTile = tile;
+		} else
+			setSelectedTile(tile);
 		return true;
 	}
 
 	private void setSelectedTile(Tile tile) {
+		if( tile == null && selectedTile != null)
+			selectedTile.selected(false);
 		selectedTile = tile;
-		callSelectionListeners();
+		if( selectedTile != null )
+			selectedTile.selected(true);
 	}
 
-	private void callSelectionListeners() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public int getScore() {
 		return score;
