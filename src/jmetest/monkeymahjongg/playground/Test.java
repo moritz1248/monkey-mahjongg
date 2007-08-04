@@ -38,14 +38,24 @@ public class Test {
 
 	public static void main(String[] args) {
 		int maxRemovedTiles = 0;
-		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/butterfly.xml"));
-		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/standard.xml"));
-		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/block.xml"));
-		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/castle.xml"));
-		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/stairs.xml"));
-		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/towers.xml"));
+		while (maxRemovedTiles < 100) {
+			maxRemovedTiles = Math.max(maxRemovedTiles,
+					testBoard("level/butterfly.xml"));
+			maxRemovedTiles = Math.max(maxRemovedTiles,
+					testBoard("level/standard.xml"));
+			maxRemovedTiles = Math.max(maxRemovedTiles,
+					testBoard("level/block.xml"));
+			maxRemovedTiles = Math.max(maxRemovedTiles,
+					testBoard("level/castle.xml"));
+			maxRemovedTiles = Math.max(maxRemovedTiles,
+					testBoard("level/stairs.xml"));
+			maxRemovedTiles = Math.max(maxRemovedTiles,
+					testBoard("level/towers.xml"));
+			System.out.println("best result so far: " + maxRemovedTiles);
+			System.gc();
+		}
 
-		System.out.println( "best result: " + maxRemovedTiles );
+		System.out.println("best result: " + maxRemovedTiles);
 	}
 
 	private static int testBoard(String level) {
@@ -90,8 +100,8 @@ public class Test {
 		int originalTileCount = board.getOriginalTileCount();
 		int removedTiles = originalTileCount - tileCount;
 		System.out.println(String.format(
-				"done. %d tiles removed. %d/%d tiles remaining",
-				removedTiles, tileCount, originalTileCount));
+				"done. %d tiles removed. %d/%d tiles remaining", removedTiles,
+				tileCount, originalTileCount));
 		return removedTiles;
 	}
 }
