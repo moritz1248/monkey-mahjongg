@@ -39,7 +39,11 @@ public abstract class TileGroup {
 		}
 	
 		if (first != null && second != null)
-			return new Hint(first, second);
+		{
+			if( !first.isBlocked() && !second.isBlocked() )
+				return new Hint(first, second);
+		}
+			
 		return null;
 	}
 

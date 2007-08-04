@@ -78,16 +78,20 @@ public class Tile {
 
 	public void removed() {
 		if( tileListener != null )
-			tileListener.removed();
+			tileListener.removed(this);
 	}
 
 	public void selected(boolean selection) {
 		if( tileListener != null )
-			tileListener.selected(selection);
+			tileListener.selected(this, selection);
 	}
 
 	public void setTileListener(ITileListener tileListener) {
 		this.tileListener = tileListener;
 	}
 
+	@Override
+	public String toString() {
+		return String.format( "Tile(%d,%d,%d)", x, y, z );
+	}
 }
