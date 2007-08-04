@@ -174,7 +174,7 @@ public class Board {
 				setSelectedTile(null);
 			} else {
 				if (selectedTile.matches(tile)) {
-					tile.selected(true);
+					tile.selected(TileSelection.match);
 
 					// remove tiles
 					selectedTile.remove();
@@ -194,10 +194,10 @@ public class Board {
 
 	private void setSelectedTile(Tile tile) {
 		if (tile == null && selectedTile != null)
-			selectedTile.selected(false);
+			selectedTile.selected(TileSelection.unselect);
 		selectedTile = tile;
 		if (selectedTile != null)
-			selectedTile.selected(true);
+			selectedTile.selected(TileSelection.first);
 	}
 
 	public int getScore() {
