@@ -37,18 +37,34 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		Board b = new Board( new XMLLevel( "level/standard.xml") );
+		int maxRemovedTiles = 0;
+		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/butterfly.xml"));
+		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/standard.xml"));
+		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/block.xml"));
+		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/castle.xml"));
+		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/stairs.xml"));
+		maxRemovedTiles = Math.max(maxRemovedTiles, testBoard("level/towers.xml"));
+
+		System.out.println( "best result: " + maxRemovedTiles );
+	}
+
+	private static int testBoard(String level) {
+		int removedTiles = 0;
+		System.out.println("Testing board " + level);
+		Board b = new Board(new XMLLevel(level));
 		int missingTileCount = b.missingTileCount();
 		if (missingTileCount == 0) {
 			System.out.println("board is valid");
-			enumerating(b);
+			removedTiles = enumerating(b);
 		} else {
 			System.err.println(String.format(
 					"board is not valid, %d tiles missing", missingTileCount));
 		}
+		System.out.println("=====================");
+		return removedTiles;
 	}
 
-	private static void enumerating(Board board) {
+	private static int enumerating(Board board) {
 		for (int x = 0; x < board.getWidth(); ++x)
 			for (int y = 0; y < board.getHeight(); ++y)
 				for (int z = 0; z < board.getDepth(); ++z) {
@@ -70,6 +86,12 @@ public class Test {
 			hint.getSecond().select();
 		}
 
-		System.out.println("done.");
+		int tileCount = board.getTileCount();
+		int originalTileCount = board.getOriginalTileCount();
+		int removedTiles = originalTileCount - tileCount;
+		System.out.println(String.format(
+				"done. %d tiles removed. %d/%d tiles remaining",
+				removedTiles, tileCount, originalTileCount));
+		return removedTiles;
 	}
 }

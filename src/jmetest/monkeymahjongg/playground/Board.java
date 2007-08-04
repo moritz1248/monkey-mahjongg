@@ -15,6 +15,7 @@ public class Board {
 	private int groupCount;
 	private Tile selectedTile = null;
 	private int score;
+	private int originalTileCount;
 
 	public Board(XMLLevel level) {
 		loadTileGroups();
@@ -24,7 +25,6 @@ public class Board {
 		this.depth = level.getDepth();
 		tiles = new Tile[width][height][depth];
 
-		Vector<Coord> addVector = new Vector<Coord>();
 		for (int line = 0; line < level.getLines().size(); ++line) {
 			String data = level.getLines().elementAt(line);
 			for (int x = 0; x < data.length(); x++) {
@@ -36,16 +36,23 @@ public class Board {
 								&& getTile(x, line - 1, z) == null
 								&& getTile(x + 1, line - 1, z) == null
 								&& getTile(x - 1, line, z) == null) {
-							addVector.add(new Coord(x, line, z));
+							addTile(x, line, z);
+							originalTileCount++;
 						}
 					}
 				}
 			}
 		}
 
-		setGroupCount(addVector.size() / 4);
-		for (Coord c : addVector)
-			addTile(c.x, c.y, c.z);
+		setGroupCount(originalTileCount / 4);
+		
+		for (int x = 0; x < getWidth(); ++x)
+			for (int y = 0; y < getHeight(); ++y)
+				for (int z = 0; z < getDepth(); ++z) {
+					Tile tile = getTile(x, y, z);
+					if( tile != null )
+						assignGroup(tile);
+				}
 	}
 
 	private void loadTileGroups() {
@@ -95,8 +102,6 @@ public class Board {
 	private void setTile(int x, int y, int z, Tile tile) {
 		if (isValid(x, y, z))
 			tiles[x][y][z] = tile;
-		if (tile != null && tile.getGroup() == null)
-			assignGroup(tile);
 	}
 
 	private void assignGroup(Tile tile) {
@@ -204,5 +209,20 @@ public class Board {
 			}
 		}
 		return null;
+	}
+
+	public int getOriginalTileCount() {
+		return originalTileCount;
+	}
+
+	public int getTileCount() {
+		int count = 0;
+		for (int x = 0; x < tiles.length; ++x)
+			for (int y = 0; y < tiles[x].length; ++y)
+				for (int z = 0; z < tiles[x][y].length; ++z) {
+					if (tiles[x][y][z] != null)
+						count++;
+				}
+		return count;
 	}
 }
