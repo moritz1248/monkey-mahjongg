@@ -1,16 +1,13 @@
 package jmetest.monkeymahjongg.playground;
 
-public class Tile {
+public class Tile extends Coord {
 	private Board owner;
-	private int x, y, z;
 	private TileGroup group;
 	private ITileListener tileListener = null;
 
 	public Tile(Board owner, int x, int y, int z) {
+		super(x,y,z);
 		this.owner = owner;
-		this.x = x;
-		this.y = y;
-		this.z = z;
 	}
 
 	public boolean isBlocked() {
@@ -48,17 +45,6 @@ public class Tile {
 		group.remove(this);
 	}
 
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public int getZ() {
-		return z;
-	}
 
 	public boolean matches(Tile tile) {
 		return tile.getGroup().equals(group);

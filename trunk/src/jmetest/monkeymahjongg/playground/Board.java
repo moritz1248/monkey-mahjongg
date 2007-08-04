@@ -16,13 +16,36 @@ public class Board {
 	private Tile selectedTile = null;
 	private int score;
 
-	public Board(int width, int height, int depth) {
-		tiles = new Tile[width][height][depth];
-		this.width = width;
-		this.height = height;
-		this.depth = depth;
-
+	public Board(XMLLevel level) {
 		loadTileGroups();
+
+		this.width = level.getWidth();
+		this.height = level.getHeight();
+		this.depth = level.getDepth();
+		tiles = new Tile[width][height][depth];
+
+		Vector<Coord> addVector = new Vector<Coord>();
+		for (int line = 0; line < level.getLines().size(); ++line) {
+			String data = level.getLines().elementAt(line);
+			for (int x = 0; x < data.length(); x++) {
+				char c = data.charAt(x);
+				if ('1' <= c && c <= '9') {
+					int n = c - '1';
+					for (int z = 0; z <= n; z++) {
+						if (getTile(x - 1, line - 1, z) == null
+								&& getTile(x, line - 1, z) == null
+								&& getTile(x + 1, line - 1, z) == null
+								&& getTile(x - 1, line, z) == null) {
+							addVector.add(new Coord(x, line, z));
+						}
+					}
+				}
+			}
+		}
+
+		setGroupCount(addVector.size() / 4);
+		for (Coord c : addVector)
+			addTile(c.x, c.y, c.z);
 	}
 
 	private void loadTileGroups() {
@@ -39,12 +62,13 @@ public class Board {
 				if (prefix != null) {
 					if (!extended.contains(prefix)) {
 						tg = new ExtendedTileGroup(imageDirectory, prefix);
+						availableGroups.add(tg);
 						extended.add(prefix);
 					}
-				} else
+				} else {
 					tg = new SimpleTileGroup(imageDirectory + file);
-
-				availableGroups.add(tg);
+					availableGroups.add(tg);
+				}
 			}
 		}
 	}
@@ -81,7 +105,7 @@ public class Board {
 		int groupPos = (int) (Math.random() * availableGroups.size());
 		TileGroup tg = availableGroups.elementAt(groupPos);
 		if (!tg.assignTo(tile)) {
-			availableGroups.remove(tg);
+			availableGroups.remove(availableGroups.indexOf(tg));
 			satisfiedGroups.add(tg);
 		}
 	}
@@ -132,30 +156,6 @@ public class Board {
 		return depth;
 	}
 
-	public static int countTiles(int[][][] layers) {
-		int count = 0;
-		for (int z = 0; z < layers.length; ++z) {
-			for (int y = 0; y < layers[z].length; ++y) {
-				for (int x = 0; x < layers[z][y].length; ++x) {
-					if (layers[z][y][x] == 1)
-						count++;
-				}
-			}
-		}
-		return count;
-	}
-
-	public void addTiles(int[][][] layers) {
-		for (int z = 0; z < layers.length; ++z) {
-			for (int y = 0; y < layers[z].length; ++y) {
-				for (int x = 0; x < layers[z][y].length; ++x) {
-					if (layers[z][y][x] == 1)
-						addTile(x, y, z);
-				}
-			}
-		}
-	}
-
 	protected boolean selectTile(Tile tile) {
 		if (tile.isBlocked())
 			return false;
@@ -166,11 +166,11 @@ public class Board {
 			} else {
 				if (selectedTile.matches(tile)) {
 					tile.selected(true);
-					
+
 					// remove tiles
 					selectedTile.remove();
 					tile.remove();
-					
+
 					selectedTile = null;
 					score++;
 				} else {
