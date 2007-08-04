@@ -63,7 +63,7 @@ public class Tile extends Coord {
 	 * 
 	 * @return TileGroup for this tile
 	 */
-	public TileGroup getGroup() {
+	protected TileGroup getGroup() {
 		return group;
 	}
 
