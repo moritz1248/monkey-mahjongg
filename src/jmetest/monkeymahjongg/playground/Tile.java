@@ -4,6 +4,7 @@ public class Tile {
 	private Board owner;
 	private int x, y, z;
 	private TileGroup group;
+	private ITileListener tileListener = null;
 
 	public Tile(Board owner, int x, int y, int z) {
 		this.owner = owner;
@@ -13,26 +14,38 @@ public class Tile {
 	}
 
 	public boolean isBlocked() {
-		if (owner.getTile(x, y, z + 1) != null
-				&& owner.getTile(x, y - 1, z + 1) != null
-				&& owner.getTile(x, y + 1, z + 1) != null
-				&& owner.getTile(x - 1, y, z + 1) != null
-				&& owner.getTile(x + 1, y, z + 1) != null)
-			return true;
-		if (owner.getTile(x - 1, y, z) != null
-				&& owner.getTile(x + 1, y, z) != null)
-			return true;
-		return false;
+		int tx = x;
+		int ty = y;
+		int tz = z;
+
+		// check for tiles on top
+		for (int x = -1; x <= 1; x++) {
+			for (int y = -1; y <= 1; y++) {
+				if (owner.getTile(tx + x, ty + y, tz + 1) != null) {
+					return true;
+				}
+			}
+		}
+
+		// check if left is free
+		if (owner.getTile(tx - 2, ty - 1, tz) == null
+				&& owner.getTile(tx - 2, ty, tz) == null
+				&& owner.getTile(tx - 2, ty + 1, tz) == null) {
+			return false;
+		}
+
+		// check if right is free
+		if (owner.getTile(tx + 2, ty - 1, tz) == null
+				&& owner.getTile(tx + 2, ty, tz) == null
+				&& owner.getTile(tx + 2, ty + 1, tz) == null) {
+			return false;
+		}
+		return true;
 	}
 
 	public void remove() {
 		owner.remove(this);
-		callRemoveListeners();
-	}
-
-	private void callRemoveListeners() {
-		// TODO Auto-generated method stub
-		
+		group.remove(this);
 	}
 
 	public int getX() {
@@ -58,4 +71,23 @@ public class Tile {
 	public void setGroup(TileGroup group) {
 		this.group = group;
 	}
+
+	public boolean select() {
+		return owner.selectTile(this);
+	}
+
+	public void removed() {
+		if( tileListener != null )
+			tileListener.removed();
+	}
+
+	public void selected(boolean selection) {
+		if( tileListener != null )
+			tileListener.selected(selection);
+	}
+
+	public void setTileListener(ITileListener tileListener) {
+		this.tileListener = tileListener;
+	}
+
 }
