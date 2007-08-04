@@ -46,6 +46,10 @@ public class Board {
 
 		setGroupCount(originalTileCount / 4);
 		
+		assignGroups();
+	}
+
+	protected void assignGroups() {
 		for (int x = 0; x < getWidth(); ++x)
 			for (int y = 0; y < getHeight(); ++y)
 				for (int z = 0; z < getDepth(); ++z) {
