@@ -52,7 +52,7 @@ public class Test {
 		int removedTiles = 0;
 		System.out.println("Testing board " + level);
 		Board b = new Board(new XMLLevel(level));
-		int missingTileCount = b.missingTileCount();
+		int missingTileCount = b.getMissingTileCount();
 		if (missingTileCount == 0) {
 			System.out.println("board is valid");
 			removedTiles = enumerating(b);

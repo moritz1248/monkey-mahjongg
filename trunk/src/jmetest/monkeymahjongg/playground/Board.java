@@ -120,12 +120,12 @@ public class Board {
 		tile.removed();
 	}
 
-	public void addTile(int x, int y, int z) {
+	private void addTile(int x, int y, int z) {
 		Tile tile = new Tile(this, x, y, z);
 		setTile(x, y, z, tile);
 	}
 
-	public void setGroupCount(int count) {
+	private void setGroupCount(int count) {
 		groupCount = count;
 		for (int i = availableGroups.size() - 1; i >= groupCount; --i) {
 			satisfiedGroups.add(availableGroups.elementAt(i));
@@ -133,7 +133,7 @@ public class Board {
 		}
 	}
 
-	public int missingTileCount() {
+	public int getMissingTileCount() {
 		int rc = 0;
 		if (availableGroups.size() == 0)
 			return 0;
