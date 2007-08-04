@@ -54,5 +54,10 @@ public abstract class TileGroup {
 		return false;
 	}
 
-	public abstract String getTextureResource( Tile tile ); 
+	 
+	public abstract String getTextureResource( Tile tile );
+
+	public Tile[] getTiles() {
+		return tiles;
+	} 
 }
