@@ -15,7 +15,7 @@ public class ExtendedTileGroup extends TileGroup {
 	public String getTextureResource(Tile tile) {
 		for( int i=0; i<tiles.length; ++i)
 			if( tiles[i] == tile )
-				return String.format( "%s%s%d", imageDirectory, prefix, i+1 );
+				return String.format( "%s%s%d.png", imageDirectory, prefix, i+1 );
 		return null;
 	}
 
