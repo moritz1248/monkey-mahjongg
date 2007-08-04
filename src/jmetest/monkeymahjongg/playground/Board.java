@@ -42,7 +42,7 @@ public class Board {
 						extended.add(prefix);
 					}
 				} else
-					tg = new SimpleTileGroup(imageDirectory + "/" + file);
+					tg = new SimpleTileGroup(imageDirectory + file);
 
 				availableGroups.add(tg);
 			}
@@ -64,8 +64,8 @@ public class Board {
 	}
 
 	private boolean isValid(int x, int y, int z) {
-		return (x >= 0 || x < width) && (y >= 0 || y < height)
-				&& (z >= 0 || z < depth);
+		return (x >= 0 && x < width) && (y >= 0 && y < height)
+				&& (z >= 0 && z < depth);
 	}
 
 	private void setTile(int x, int y, int z, Tile tile) {
@@ -165,9 +165,13 @@ public class Board {
 				setSelectedTile(null);
 			} else {
 				if (selectedTile.matches(tile)) {
+					tile.selected(true);
+					
 					// remove tiles
 					selectedTile.remove();
 					tile.remove();
+					
+					selectedTile = null;
 					score++;
 				} else {
 					setSelectedTile(null);
@@ -180,15 +184,25 @@ public class Board {
 	}
 
 	private void setSelectedTile(Tile tile) {
-		if( tile == null && selectedTile != null)
+		if (tile == null && selectedTile != null)
 			selectedTile.selected(false);
 		selectedTile = tile;
-		if( selectedTile != null )
+		if (selectedTile != null)
 			selectedTile.selected(true);
 	}
 
-
 	public int getScore() {
 		return score;
+	}
+
+	public Hint getHint() {
+		for (TileGroup group : satisfiedGroups) {
+			if (group != null) {
+				Hint hint = group.getHint();
+				if (hint != null)
+					return hint;
+			}
+		}
+		return null;
 	}
 }
