@@ -21,14 +21,16 @@ public class Test {
 		}
 
 		@Override
-		public void selected(Tile tile, boolean selection) {
-			if (selection) {
+		public void selected(Tile tile, TileSelection selection) {
+			if (selection == TileSelection.first)
 				System.out.println("Tile " + tile + " selected "
 						+ tile.getGroup().getTextureResource(tile));
-			} else {
+			else if (selection == TileSelection.match)
+				System.out.println("Tile " + tile + " selected (match) "
+						+ tile.getGroup().getTextureResource(tile));
+			else
 				System.out.println("Tile " + tile + " unselected "
 						+ tile.getGroup().getTextureResource(tile));
-			}
 		}
 
 		public Tile getTile() {

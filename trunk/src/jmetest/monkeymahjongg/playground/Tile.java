@@ -67,7 +67,7 @@ public class Tile extends Coord {
 			tileListener.removed(this);
 	}
 
-	protected void selected(boolean selection) {
+	protected void selected(TileSelection selection) {
 		if( tileListener != null )
 			tileListener.selected(this, selection);
 	}
