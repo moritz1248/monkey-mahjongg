@@ -36,7 +36,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		int maxRemovedTiles = 0;
-		while (maxRemovedTiles < 100) {
+		while (maxRemovedTiles < 144) {
 			maxRemovedTiles = Math.max(maxRemovedTiles,
 					testBoard("level/butterfly.xml"));
 			maxRemovedTiles = Math.max(maxRemovedTiles,
