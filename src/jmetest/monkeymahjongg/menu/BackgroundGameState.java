@@ -48,6 +48,8 @@ import com.jmex.game.state.BasicGameState;
 public class BackgroundGameState extends BasicGameState {
 
     private Box box;
+    private Vector3f cameraLocation;
+    private Vector3f cameraDirection;
     
     public BackgroundGameState(String texture) {
         super("background");
@@ -84,6 +86,17 @@ public class BackgroundGameState extends BasicGameState {
 
         getRootNode().addController(new RotController(box, new Vector3f(1, 1, 0.5f), 25));
         
+        cameraLocation = DisplaySystem.getDisplaySystem().getRenderer().getCamera().getLocation();
+        cameraDirection = DisplaySystem.getDisplaySystem().getRenderer().getCamera().getDirection();
+    }
+    
+    @Override
+    public void setActive(boolean active) {
+        super.setActive(active);
+        if (active) {
+            DisplaySystem.getDisplaySystem().getRenderer().getCamera().setLocation(cameraLocation);
+            DisplaySystem.getDisplaySystem().getRenderer().getCamera().setDirection(cameraDirection);
+        }
     }
     
     private static class RotController extends Controller {

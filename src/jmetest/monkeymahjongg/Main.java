@@ -34,10 +34,14 @@ import com.jmex.game.state.GameState;
 import java.util.prefs.Preferences;
 import jmetest.monkeymahjongg.menu.BackgroundGameState;
 import com.jmex.game.state.GameStateManager;
+import java.lang.reflect.Constructor;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
 import jmetest.monkeymahjongg.game.Level;
 import jmetest.monkeymahjongg.game.MahjonggGameState;
 import jmetest.monkeymahjongg.menu.swingui.MainMenuGameState;
+import jmetest.monkeymahjongg.menu.swingui.SettingsMenuGameState;
 
 /**
  *
@@ -81,14 +85,20 @@ public class Main {
         GameStateManager.getInstance().attachChild(mahjonggGameState);
 
         try {
-            mainMenuGameState = (MainMenuGameState) Class.forName(
+            mainMenuGameState = (GameState) Class.forName(
                 "jmetest.monkeymahjongg.menu." + menuPackage 
                 + ".MainMenuGameState").newInstance();
             GameStateManager.getInstance().attachChild(mainMenuGameState);
             mainMenuGameState.setActive(true);
         
+            Constructor settingsConstructor = Class.forName(
+            "jmetest.monkeymahjongg.menu." + menuPackage 
+                + ".SettingsMenuGameState").getConstructor(GameSettings.class);   
+            settingsMenuGameState = (GameState) settingsConstructor.newInstance(gameSettings);
+            GameStateManager.getInstance().attachChild(settingsMenuGameState);
             
         } catch (Exception ex) {
+            ex.printStackTrace();
             System.exit(-1);
         }
 
@@ -106,10 +116,13 @@ public class Main {
     }
 
     public static void selectSettingsMenu() {
-        System.out.println("settings");
+        mainMenuGameState.setActive(false);
+        settingsMenuGameState.setActive(true);
     }
 
     public static void selectMainMenu() {
+        settingsMenuGameState.setActive(false);
+        backgroundGameState.setActive(true);
         mainMenuGameState.setActive(true);
     }
 
@@ -136,5 +149,17 @@ public class Main {
 
     public static void exit() {
         standardGame.shutdown();
+    }
+    
+        public static void savePreferences() {
+        try {
+            preferences.flush();
+        } catch (BackingStoreException ex) {
+            //Logger.getLogger("global").log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void changeResolution() {
+        //standardGame.recreateGraphicalContext();
     }
 }

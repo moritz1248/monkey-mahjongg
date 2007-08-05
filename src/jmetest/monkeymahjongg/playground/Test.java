@@ -9,14 +9,12 @@ public class Test {
 			this.tile = tile;
 		}
 
-		@Override
 		public void removed(Tile tile) {
 			System.out.println("Tile " + tile + " removed "
 					+ tile.getGroup().getTextureResource(tile));
 			tile.setTileListener(null);
 		}
 
-		@Override
 		public void selected(Tile tile, TileSelection selection) {
 			if (selection == TileSelection.first)
 				System.out.println("Tile " + tile + " selected "
