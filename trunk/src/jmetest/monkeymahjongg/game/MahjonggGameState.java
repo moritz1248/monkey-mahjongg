@@ -98,7 +98,22 @@ public class MahjonggGameState extends BasicGameState {
 
 	public MahjonggGameState() {
 		super("mahjongg");
+	}
 
+	@Override
+	public void setActive(boolean active) {
+		if (active) {
+			init(Main.getLevel());
+		} else {
+                    rootNode.detachAllChildren();
+                    rootNode.removeController(2);
+                    rootNode.removeController(1);
+                    rootNode.removeController(0);
+                }
+		super.setActive(active);
+	}
+
+	public void init(Level level) {
 		Camera camera = DisplaySystem.getDisplaySystem().getRenderer()
 				.getCamera();
 		cameraRotationNode = new Node("camRotation");
@@ -109,18 +124,8 @@ public class MahjonggGameState extends BasicGameState {
 				.fromAngleNormalAxis(FastMath.PI, new Vector3f(0, 1, 0)));
 
 		addControllers();
-	}
-
-	@Override
-	public void setActive(boolean active) {
-		if (active) {
-			init(Main.getLevel());
-		}
-		super.setActive(active);
-	}
-
-	public void init(Level level) {
-		this.level = level;
+            
+                this.level = level;
 		rootNode.detachAllChildren();
 		rootNode.attachChild(cameraRotationNode);
 		initLight();
