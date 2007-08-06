@@ -14,6 +14,8 @@ import com.jme.system.GameSettings;
 import com.jme.util.GameTaskQueueManager;
 import com.jmex.awt.swingui.JMEDesktop;
 import com.jmex.awt.swingui.JMEDesktopState;
+
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -153,7 +155,7 @@ public class SettingsMenuGameState  extends JMEDesktopState {
      private void setJLabel(String text, Point pos) {
         JDesktopPane jDesktop = getDesktop().getJDesktop();
         JLabel label = new JLabel(text);
-        label.setOpaque(true);
+        label.setForeground(Color.white);
         jDesktop.add(label);
         label.setSize(100,20);
         label.setLocation(pos);
