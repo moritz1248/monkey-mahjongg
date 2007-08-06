@@ -25,6 +25,8 @@
 package jmetest.monkeymahjongg.menu.swingui;
 
 import com.jmex.awt.swingui.JMEDesktopState;
+
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import javax.swing.AbstractAction;
@@ -96,10 +98,10 @@ public class MainMenuGameState extends JMEDesktopState {
             jDesktop.add(button);
         }
 
-        JLabel label = new JLabel("Layout");
+        JLabel label = new JLabel("Layout:");
         label.setSize(100, 15);
         label.setLocation(50, 280);
-        label.setOpaque(true);
+        label.setForeground(Color.white);
         jDesktop.add(label);
         final JList layoutList = new JList(getLayouts());
         layoutList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
