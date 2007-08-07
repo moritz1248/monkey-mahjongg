@@ -32,7 +32,10 @@ import com.jme.intersection.PickResults;
 import com.jme.math.Ray;
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
+import com.jme.renderer.ColorRGBA;
+import com.jme.scene.Geometry;
 import com.jme.scene.batch.GeomBatch;
+import com.jme.scene.state.MaterialState;
 import com.jme.system.DisplaySystem;
 
 /**
@@ -74,7 +77,8 @@ public class MousePickController extends MahjonggGameController {
 
             if (pr.getNumber() > 0) {
 				GeomBatch gb = pr.getPickData(0).getTargetMesh();
-                mahjonggGameState.getLevel().picked(gb.getParentGeom());
+                Geometry tile = gb.getParentGeom();
+				mahjonggGameState.getLevel().picked(tile);
 			}
         }
     }

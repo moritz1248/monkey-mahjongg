@@ -24,7 +24,10 @@
 
 package jmetest.monkeymahjongg.game;
 
+import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Geometry;
+import com.jme.scene.state.MaterialState;
+import com.jme.system.DisplaySystem;
 import com.sun.org.apache.xerces.internal.parsers.SAXParser;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,12 +87,12 @@ public class Level {
        if (selectedTile != null && tileData.getTileId() == selectedTile.getTileId()) {  //same tile -> unselect
            System.err.println("unselect " + selectedTile);
            selectedGeometry = null;
-           //unselect(geometry);
+           unselect(geometry);
        } else if (! isBlocked(tileData)) {
            if  (selectedGeometry == null) { //new selection
                System.err.println("select " + tileData);
                selectedGeometry = geometry;
-              //select(geometry);
+               select(geometry);
            } else if ((tileData.getTileId() ^ selectedTile.getTileId()) < 4) {  //matching tiles
                System.err.println("matching new " + tileData + " and selected " + selectedTile);
               //vaporize(geometry);
@@ -108,7 +111,22 @@ public class Level {
        }     
     }
 
-    private boolean isBlocked(TileData tileData) {
+	private void setEmissiveColor(Geometry tile, ColorRGBA color) {
+        MaterialState ms = DisplaySystem.getDisplaySystem().getRenderer().createMaterialState();
+        ms.setEmissive(color);
+        tile.setRenderState(ms);
+        tile.updateRenderState();
+	}
+
+    private void select(Geometry tile) {
+        setEmissiveColor(tile, ColorRGBA.yellow);
+	}
+
+    private void unselect(Geometry tile) {
+        setEmissiveColor(tile, ColorRGBA.white);
+	}
+
+	private boolean isBlocked(TileData tileData) {
         int tx = tileData.getX();
         int ty = tileData.getY();
         int tz = tileData.getZ();
