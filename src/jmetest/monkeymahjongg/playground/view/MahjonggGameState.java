@@ -26,6 +26,7 @@ package jmetest.monkeymahjongg.playground.view;
 import java.nio.FloatBuffer;
 
 import jmetest.monkeymahjongg.playground.controller.BackToMenuController;
+import jmetest.monkeymahjongg.playground.controller.CameraController;
 import jmetest.monkeymahjongg.playground.controller.MousePickController;
 import jmetest.monkeymahjongg.playground.model.Board;
 import jmetest.monkeymahjongg.playground.model.Main;
