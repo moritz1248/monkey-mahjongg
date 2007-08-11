@@ -81,12 +81,14 @@ public class UITile extends SharedMesh implements ITileListener {
 	}
 
 	public void removed(Tile tile) {
+		// TODO add bombastic animation here
 		removeFromParent();
 		tile.setTileListener(null);
 	}
 
 	public void selected(Tile tile, TileSelection selection) {
 		MaterialState ms = (MaterialState) getRenderState(RenderState.RS_MATERIAL);
+		// TODO when match selection is show, a little pause would be good...
 		if (selection == TileSelection.first
 				|| selection == TileSelection.match)
 			ms.setEmissive(ColorRGBA.yellow);
