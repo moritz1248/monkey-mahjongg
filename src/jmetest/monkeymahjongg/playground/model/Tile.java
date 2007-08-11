@@ -175,4 +175,9 @@ public class Tile implements Savable {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void showHint() {
+		if (tileListener != null)
+			tileListener.selected(this, TileSelection.hint);
+	}
 }
