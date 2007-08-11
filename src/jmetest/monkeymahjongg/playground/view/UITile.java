@@ -62,7 +62,7 @@ public class UITile extends SharedMesh implements ITileListener {
 				Image.GUESS_FORMAT_NO_S3TC, ts.getMaxAnisotropic(), true);
 		ts.setTexture(t);
 		setRenderState(ts);
-		updateRenderState();
+		//updateRenderState();
 	}
 
 	private void setupMaterialState() {
@@ -72,13 +72,11 @@ public class UITile extends SharedMesh implements ITileListener {
 		setRenderState(ms);
 	}
 
-	@Override
 	public void removed(Tile tile) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void selected(Tile tile, TileSelection selection) {
 		// TODO Auto-generated method stub
 

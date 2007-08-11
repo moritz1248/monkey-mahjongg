@@ -122,7 +122,6 @@ public class Tile implements Savable {
 		this.tileListener = tileListener;
 	}
 
-	@Override
 	public String toString() {
 		return String.format("Tile(%d,%d,%d)", x, y, z);
 	}
@@ -161,19 +160,17 @@ public class Tile implements Savable {
 		return board;
 	}
 
-	@Override
 	public Class<?> getClassTag() {
 		// TODO Auto-generated method stub
 		return getClass();
 	}
 
-	@Override
+
 	public void read(JMEImporter im) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void write(JMEExporter ex) throws IOException {
 		// TODO Auto-generated method stub
 		
