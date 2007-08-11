@@ -21,9 +21,9 @@
  * 
  */
 
-package jmetest.monkeymahjongg.playground.view;
+package jmetest.monkeymahjongg.playground.controller;
 
-import jmetest.monkeymahjongg.playground.controller.MahjonggGameController;
+import jmetest.monkeymahjongg.playground.view.MahjonggGameState;
 
 import com.jme.input.KeyInput;
 import com.jme.input.controls.GameControl;
@@ -35,7 +35,7 @@ import com.jme.math.Quaternion;
  * 
  * @author Pirx
  */
-class CameraController extends MahjonggGameController {
+public class CameraController extends MahjonggGameController {
 	private static final long serialVersionUID = 1L;
 
 	private final static float MIN_ANGLE = 1.2f;
