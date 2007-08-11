@@ -139,7 +139,8 @@ public class MahjonggGameState extends BasicGameState {
 		fb.put(picture);
 		fb.put(border);
 		fb.put(border);
-		fb.put(border);*/
+		fb.put(border);
+		*/
         
         Vector3f size = new Vector3f(dx, dy, dz);
         RoundedBox box = new RoundedBox("box", size, size.mult(BORDER), size.mult(SLOPE));  
@@ -155,16 +156,17 @@ public class MahjonggGameState extends BasicGameState {
 		for (int x = 0; x < level.getWidth(); x++) {
 			for (int y = 0; y < level.getHeight(); y++) {
 				for (int z = 0; z < level.getLayers(); z++) {
-					if (level.isTile(x, y, z)) {
+					if (level.isTile(x, y, z) ) {
 						int tileId = level.getTile(x, y, z);
 						SharedMesh tile = new SharedMesh("tile", box);
 						tile.setUserData(TILE_USER_DATA, new TileData(x, y, z, tileId));
 						setState(tile, tileId);
 						rootNode.attachChild(tile);
-						tile.setLocalTranslation(new Vector3f(
+						Vector3f translation = new Vector3f(
                                 dx	* (x - level.getWidth() / 2f) + dx / 2, 
                                 dy * (level.getHeight() / 2f - y) - 0.5f * dy, 
-                                2 * dz * z));
+                                2 * dz * z);
+						tile.setLocalTranslation(translation);
 						tile.setModelBound(new BoundingBox());
 						tile.updateModelBound();
 						tile.updateRenderState();

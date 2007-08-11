@@ -1,4 +1,5 @@
-package jmetest.monkeymahjongg.playground;
+package jmetest.monkeymahjongg.playground.model;
+
 
 public abstract class TileGroup {
 

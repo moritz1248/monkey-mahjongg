@@ -1,10 +1,12 @@
-package jmetest.monkeymahjongg.playground;
+package jmetest.monkeymahjongg.playground.model;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Vector;
 
-public class Board {
+
+public class Board implements Iterable<Tile> {
 	Tile[][][] tiles;
 	private int width;
 	private int height;
@@ -45,7 +47,7 @@ public class Board {
 		}
 
 		setGroupCount(originalTileCount / 4);
-		
+
 		assignGroups();
 	}
 
@@ -54,7 +56,7 @@ public class Board {
 			for (int y = 0; y < getHeight(); ++y)
 				for (int z = 0; z < getDepth(); ++z) {
 					Tile tile = getTile(x, y, z);
-					if( tile != null )
+					if (tile != null)
 						assignGroup(tile);
 				}
 	}
@@ -228,5 +230,41 @@ public class Board {
 						count++;
 				}
 		return count;
+	}
+
+	@Override
+	public Iterator<Tile> iterator() {
+		return new Iterator<Tile>() {
+
+			int x = 0;
+			int y = 0;
+			int z = 0;
+
+			@Override
+			public boolean hasNext() {
+				if( x == width - 1 && y == height - 1 && z == depth - 1 )
+					return false;
+				return true;
+			}
+
+			@Override
+			public Tile next() {
+				Tile tile = tiles[x][y][z];
+				if (z < depth - 1 )
+					z++;
+				else if (y < height - 1 ) {
+					y++;
+					z = 0;
+				} else if (x < width - 1) {
+					x++;
+					y = 0;
+				}
+				return tile;
+			}
+
+			@Override
+			public void remove() {
+			}
+		};
 	}
 }
