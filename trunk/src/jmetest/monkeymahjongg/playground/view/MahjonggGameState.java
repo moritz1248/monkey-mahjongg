@@ -27,12 +27,16 @@ import java.nio.FloatBuffer;
 
 import jmetest.monkeymahjongg.playground.controller.BackToMenuController;
 import jmetest.monkeymahjongg.playground.controller.CameraController;
+import jmetest.monkeymahjongg.playground.controller.HintController;
 import jmetest.monkeymahjongg.playground.controller.MousePickController;
 import jmetest.monkeymahjongg.playground.model.Board;
+import jmetest.monkeymahjongg.playground.model.Hint;
 import jmetest.monkeymahjongg.playground.model.Main;
 import jmetest.monkeymahjongg.playground.model.Tile;
 
+import com.jme.input.InputHandler;
 import com.jme.input.controls.GameControlManager;
+import com.jme.input.keyboard.KeyboardInputHandlerDevice;
 import com.jme.light.PointLight;
 import com.jme.math.FastMath;
 import com.jme.math.Quaternion;
@@ -73,6 +77,7 @@ public class MahjonggGameState extends BasicGameState {
 	private Node cameraRotationNode;
 	private Node cameraDistanceNode;
 	private GameControlManager gameControlManager;
+	private Board board;
 
 	public MahjonggGameState() {
 		super("mahjongg");
@@ -92,6 +97,7 @@ public class MahjonggGameState extends BasicGameState {
 	}
 
 	public void init(Board board) {
+		this.board = board;
 		Camera camera = DisplaySystem.getDisplaySystem().getRenderer()
 				.getCamera();
 		cameraRotationNode = new Node("camRotation");
@@ -125,7 +131,7 @@ public class MahjonggGameState extends BasicGameState {
 				rootNode.attachChild(uiTile);
 			}
 		}
-                rootNode.updateRenderState();
+        rootNode.updateRenderState();
 	}
 
 	private void initLight() {
@@ -149,6 +155,7 @@ public class MahjonggGameState extends BasicGameState {
 		rootNode.addController(new CameraController(this));
 		rootNode.addController(new BackToMenuController(this));
 		rootNode.addController(new MousePickController(this));
+		rootNode.addController(new HintController(this));
 	}
 
 	public Node getCameraRotationNode() {
@@ -161,5 +168,14 @@ public class MahjonggGameState extends BasicGameState {
 
 	public GameControlManager getGameControlManager() {
 		return gameControlManager;
+	}
+
+	public void hint() {
+		Hint hint = board.getHint();
+		if( hint != null )
+		{
+			hint.getFirst().showHint();
+			hint.getSecond().showHint();
+		}
 	}
 }

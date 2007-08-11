@@ -71,7 +71,7 @@ public class Main {
 				StandardGame.GameType.GRAPHICAL, gameSettings);
 		standardGame.setBackgroundColor(ColorRGBA.darkGray);
 		standardGame.start();
-
+		
 		backgroundGameState = new BackgroundGameState(
 				"jmetest/data/images/Monkey.jpg");
 		GameStateManager.getInstance().attachChild(backgroundGameState);
