@@ -43,6 +43,7 @@ import com.jme.scene.SharedMesh;
 import com.jme.scene.Spatial;
 import com.jme.scene.shape.Box;
 import com.jme.scene.shape.RoundedBox;
+import com.jme.scene.state.CullState;
 import com.jme.scene.state.LightState;
 import com.jme.scene.state.MaterialState;
 import com.jme.scene.state.TextureState;
@@ -207,6 +208,11 @@ public class MahjonggGameState extends BasicGameState {
 						.getMaxAnisotropic(), true);
 		ts.setTexture(t);
 		tile.setRenderState(ts);
+                
+                CullState cs = DisplaySystem.getDisplaySystem().getRenderer()
+				.createCullState();
+                cs.setCullMode(CullState.CS_BACK);
+                tile.setRenderState(cs);
 	}
 
 	private void initLight() {
