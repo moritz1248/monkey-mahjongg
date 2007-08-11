@@ -1,7 +1,8 @@
-package jmetest.monkeymahjongg.playground;
+package jmetest.monkeymahjongg.playground.model;
 
 import java.io.IOException;
 import java.util.Vector;
+
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

@@ -1,4 +1,4 @@
-package jmetest.monkeymahjongg.playground;
+package jmetest.monkeymahjongg.playground.model;
 
 public enum TileSelection {
 	first, match, unselect

@@ -1,4 +1,5 @@
-package jmetest.monkeymahjongg.playground;
+package jmetest.monkeymahjongg.playground.model;
+
 
 public class Test {
 
@@ -71,16 +72,15 @@ public class Test {
 	}
 
 	private static int enumerating(Board board) {
-		for (int x = 0; x < board.getWidth(); ++x)
-			for (int y = 0; y < board.getHeight(); ++y)
-				for (int z = 0; z < board.getDepth(); ++z) {
-					Tile tile = board.getTile(x, y, z);
-					if (tile != null) {
-						GUITile guiTile = new GUITile(tile);
-						tile.setTileListener(guiTile);
-					}
-				}
-
+		
+		for( Tile tile : board )
+		{
+			if (tile != null) {
+				GUITile guiTile = new GUITile(tile);
+				tile.setTileListener(guiTile);
+			}
+		}
+		
 		while (true) {
 			Hint hint = board.getHint();
 			if (hint == null) {

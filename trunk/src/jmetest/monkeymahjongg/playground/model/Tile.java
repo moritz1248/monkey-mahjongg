@@ -1,15 +1,26 @@
-package jmetest.monkeymahjongg.playground;
+package jmetest.monkeymahjongg.playground.model;
 
+import java.io.IOException;
 import java.util.Vector;
 
-public class Tile extends Coord {
-	private Board owner;
+import com.jme.util.export.JMEExporter;
+import com.jme.util.export.JMEImporter;
+import com.jme.util.export.Savable;
+
+
+public class Tile implements Savable {
+	private Board board;
 	private TileGroup group;
 	private ITileListener tileListener = null;
+	private int x;
+	private int y;
+	private int z;
 
 	public Tile(Board owner, int x, int y, int z) {
-		super(x, y, z);
-		this.owner = owner;
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.board = owner;
 	}
 
 	/**
@@ -25,23 +36,23 @@ public class Tile extends Coord {
 		// check for tiles on top
 		for (int x = -1; x <= 1; x++) {
 			for (int y = -1; y <= 1; y++) {
-				if (owner.getTile(tx + x, ty + y, tz + 1) != null) {
+				if (board.getTile(tx + x, ty + y, tz + 1) != null) {
 					return true;
 				}
 			}
 		}
 
 		// check if left is free
-		if (owner.getTile(tx - 2, ty - 1, tz) == null
-				&& owner.getTile(tx - 2, ty, tz) == null
-				&& owner.getTile(tx - 2, ty + 1, tz) == null) {
+		if (board.getTile(tx - 2, ty - 1, tz) == null
+				&& board.getTile(tx - 2, ty, tz) == null
+				&& board.getTile(tx - 2, ty + 1, tz) == null) {
 			return false;
 		}
 
 		// check if right is free
-		if (owner.getTile(tx + 2, ty - 1, tz) == null
-				&& owner.getTile(tx + 2, ty, tz) == null
-				&& owner.getTile(tx + 2, ty + 1, tz) == null) {
+		if (board.getTile(tx + 2, ty - 1, tz) == null
+				&& board.getTile(tx + 2, ty, tz) == null
+				&& board.getTile(tx + 2, ty + 1, tz) == null) {
 			return false;
 		}
 		return true;
@@ -51,7 +62,7 @@ public class Tile extends Coord {
 	 * Removes tile from the board
 	 */
 	public void remove() {
-		owner.remove(this);
+		board.remove(this);
 		group.remove(this);
 	}
 
@@ -77,7 +88,7 @@ public class Tile extends Coord {
 	 * @return true if tile is either selected, unselected or removed
 	 */
 	public boolean select() {
-		return owner.selectTile(this);
+		return board.selectTile(this);
 	}
 
 	/**
@@ -132,5 +143,39 @@ public class Tile extends Coord {
 
 	public String getTextureResource() {
 		return group.getTextureResource(this);
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getZ() {
+		return z;
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	@Override
+	public Class<?> getClassTag() {
+		// TODO Auto-generated method stub
+		return getClass();
+	}
+
+	@Override
+	public void read(JMEImporter im) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void write(JMEExporter ex) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 }

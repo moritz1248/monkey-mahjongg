@@ -1,4 +1,4 @@
-package jmetest.monkeymahjongg.playground;
+package jmetest.monkeymahjongg.playground.model;
 
 import java.util.Vector;
 
