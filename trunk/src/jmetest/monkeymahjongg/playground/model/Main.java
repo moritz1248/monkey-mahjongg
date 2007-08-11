@@ -132,9 +132,9 @@ public class Main {
 	}
 
 	public static void stopLevel() {
+		mahjonggGameState.setActive(false);
 		mainMenuGameState.setActive(true);
 		backgroundGameState.setActive(true);
-		mahjonggGameState.setActive(false);
 	}
 
 	public static void setLayoutName(String layoutName) {
