@@ -125,6 +125,7 @@ public class MahjonggGameState extends BasicGameState {
 				rootNode.attachChild(uiTile);
 			}
 		}
+                rootNode.updateRenderState();
 	}
 
 	private void initLight() {

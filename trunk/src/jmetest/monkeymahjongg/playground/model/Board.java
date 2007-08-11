@@ -232,7 +232,6 @@ public class Board implements Iterable<Tile> {
 		return count;
 	}
 
-	@Override
 	public Iterator<Tile> iterator() {
 		return new Iterator<Tile>() {
 
@@ -240,14 +239,12 @@ public class Board implements Iterable<Tile> {
 			int y = 0;
 			int z = 0;
 
-			@Override
 			public boolean hasNext() {
 				if( x == width - 1 && y == height - 1 && z == depth - 1 )
 					return false;
 				return true;
 			}
 
-			@Override
 			public Tile next() {
 				Tile tile = tiles[x][y][z];
 				if (z < depth - 1 )
@@ -262,7 +259,6 @@ public class Board implements Iterable<Tile> {
 				return tile;
 			}
 
-			@Override
 			public void remove() {
 			}
 		};
