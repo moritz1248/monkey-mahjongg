@@ -161,19 +161,14 @@ public class Tile implements Savable {
 	}
 
 	public Class<?> getClassTag() {
-		// TODO Auto-generated method stub
 		return getClass();
 	}
 
 
 	public void read(JMEImporter im) throws IOException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void write(JMEExporter ex) throws IOException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void showHint() {
