@@ -48,7 +48,7 @@ import jmetest.monkeymahjongg.game.MahjonggGameState;
  * @author Pirx
  */
 public class TileViewer extends SimpleGame {
-	private static float[] picture = new float[] { 0.7f, 0, 0, 0, 0, 1, 0.7f, 1 };
+	private static float[] picture = new float[] { 0.7f, 0, 0, 0, 0, 0.5f, 0.7f, 0.5f };
 	private static float[] border = new float[] { 1, 0, 0.7f, 0, 0.7f, 1, 1, 1 };
 
  	private float dx = 3.5f;
@@ -58,7 +58,7 @@ public class TileViewer extends SimpleGame {
     private GameControl plus;
     private GameControl minus;
     
-    private int id = 0;
+    private int id = 200;
     
     private boolean released = true;
     
@@ -77,14 +77,10 @@ public class TileViewer extends SimpleGame {
     private Spatial getTile() {
  		Box box = new Box("box", new Vector3f(), new Vector3f(2 * dx, 2 * dy,
 				dz));
-		FloatBuffer fb = box.getTextureBuffer(0, 0);
-		fb.rewind();
-		fb.put(picture);
-		fb.put(border);
-		fb.put(picture);
-		fb.put(border);
-		fb.put(border);
-		fb.put(border);
+                BoxRemapper remapper = new BoxRemapper();
+                remapper.setSide(BoxRemapper.ALL, border);
+                remapper.setSide(BoxRemapper.FRONT + BoxRemapper.BACK, picture);
+                remapper.remap(box);
        
         return box;
     }
@@ -104,8 +100,10 @@ public class TileViewer extends SimpleGame {
             tex += "dragon" + (((tileId - 124) / 4) + 1);
         } else if (tileId < 140) {
             tex += "flower" + (tileId - 136 + 1);
-        } else {
+        } else if (tileId < 144) {
             tex += "season" + (tileId - 140 + 1);
+        } else {
+            tex += "test";
         }
         tex += ".png";
 
