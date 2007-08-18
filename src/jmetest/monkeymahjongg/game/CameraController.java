@@ -28,12 +28,13 @@ import com.jme.input.controls.GameControl;
 import com.jme.input.controls.GameControlManager;
 import com.jme.input.controls.binding.KeyboardBinding;
 import com.jme.math.Quaternion;
+import com.jme.scene.Controller;
 
 /**
  * 
  * @author Pirx
  */
-class CameraController extends MahjonggGameController {
+class CameraController extends Controller {
 	private static final long serialVersionUID = 1L;
 
 	private final static float MIN_ANGLE = 1.2f;
@@ -51,11 +52,14 @@ class CameraController extends MahjonggGameController {
 	private GameControl down;
 	private GameControl forward;
 	private GameControl backward;
+        
+        private CameraGameState gameState;
 
-	public CameraController(MahjonggGameState mahjonggGameState) {
-		super( mahjonggGameState );
-		
-		GameControlManager manager = mahjonggGameState.getGameControlManager();
+	public CameraController(CameraGameState gameState) {
+	         
+                this.gameState = gameState;
+            
+		GameControlManager manager = new GameControlManager();
 		left = manager.addControl("left");
 		left.addBinding(new KeyboardBinding(KeyInput.KEY_LEFT));
 		right = manager.addControl("right");
@@ -72,6 +76,10 @@ class CameraController extends MahjonggGameController {
 
 
 	public void update(float time) {
+            
+                //System.out.println("rot:" + gameState.getCameraRotationNode().getLocalRotation());
+                //System.out.println("trans:" + gameState.getCameraDistanceNode().getLocalTranslation());
+            
 		float newHAngle = hAngle + SPEED * time
 				* (right.getValue() - left.getValue());
 		if (-MIN_ANGLE < newHAngle && newHAngle < MIN_ANGLE) {
@@ -82,7 +90,7 @@ class CameraController extends MahjonggGameController {
 		if (-MIN_ANGLE < newVAngle && newVAngle < MIN_ANGLE) {
 			vAngle = newVAngle;
 		}
-		mahjonggGameState.getCameraRotationNode().setLocalRotation(new Quaternion(new float[] { vAngle,
+		gameState.getCameraRotationNode().setLocalRotation(new Quaternion(new float[] { vAngle,
 				hAngle, 0f }));
 
 		float newDist = distance + 20 * SPEED * time
@@ -90,7 +98,7 @@ class CameraController extends MahjonggGameController {
 		if (MIN_DISTANCE < newDist && newDist < MAX_DISTANCE) {
 			distance = newDist;
 		}
-		mahjonggGameState.getCameraDistanceNode().setLocalTranslation(0, 0, distance);
+		gameState.getCameraDistanceNode().setLocalTranslation(0, 0, distance);
 	}
 
 }

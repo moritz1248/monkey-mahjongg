@@ -83,6 +83,9 @@ public class Level {
     
     void picked(Geometry geometry) {
         TileData tileData = getTileData(geometry);
+        if (tileData == null) { //picked something else
+            return;
+        }
         TileData selectedTile = getSelectedTile();
        if (selectedTile != null && tileData.getTileId() == selectedTile.getTileId()) {  //same tile -> unselect
            System.err.println("unselect " + selectedTile);
@@ -170,6 +173,7 @@ public class Level {
     }
 
     public void setTile(int x, int y, int z, int n) {
+        //System.out.printf("x:%d y:%d z:%d n:%d", x,y,z,n);
         tiles[x][y][z] = n;
     }
 
@@ -230,5 +234,11 @@ public class Level {
                 line++;
             }
         }
+        
+        /*public void endElement(String uri, String localName, String qName) {
+            if ("mahjongg".equals(qName)) {
+                System.out.println(tiles);
+            }
+        }*/
     }
 }

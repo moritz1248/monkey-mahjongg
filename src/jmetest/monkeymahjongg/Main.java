@@ -38,6 +38,7 @@ import java.lang.reflect.Constructor;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
+import jmetest.monkeymahjongg.game.CameraGameState;
 import jmetest.monkeymahjongg.game.Level;
 import jmetest.monkeymahjongg.game.MahjonggGameState;
 import jmetest.monkeymahjongg.menu.swingui.MainMenuGameState;
@@ -58,6 +59,7 @@ public class Main {
     private static GameState settingsMenuGameState;
     private static GameState levelMenuGameState;
     private static GameState mahjonggGameState;
+    private static CameraGameState cameraGameState;
 
     private static String menuPackage;
     
@@ -80,6 +82,11 @@ public class Main {
         backgroundGameState = new BackgroundGameState("jmetest/data/images/Monkey.jpg");
         GameStateManager.getInstance().attachChild(backgroundGameState);
         backgroundGameState.setActive(true);
+        
+        cameraGameState = new CameraGameState();
+        GameStateManager.getInstance().attachChild(cameraGameState);
+        cameraGameState.setActive(true);
+        cameraGameState.setFixed();
         
         mahjonggGameState = new MahjonggGameState();
         GameStateManager.getInstance().attachChild(mahjonggGameState);
@@ -130,12 +137,14 @@ public class Main {
         mainMenuGameState.setActive(false);
         backgroundGameState.setActive(false);
         mahjonggGameState.setActive(true);
+        cameraGameState.setMoveable();
     }
     
     public static void stopLevel() {
         mainMenuGameState.setActive(true);
         backgroundGameState.setActive(true);
         mahjonggGameState.setActive(false);
+        cameraGameState.setFixed();
     }
     
     
