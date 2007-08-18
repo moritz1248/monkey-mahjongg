@@ -73,7 +73,7 @@ public class Main {
 		standardGame.start();
 		
 		backgroundGameState = new BackgroundGameState(
-				"jmetest/data/images/Monkey.jpg");
+				"jmetest/monkeymahjongg/images/Monkey.jpg");
 		GameStateManager.getInstance().attachChild(backgroundGameState);
 		backgroundGameState.setActive(true);
 
