@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<mahjongg name="Towers" width="21" height="11" layers="6">
+<line data="6 6 . . 6 6 . . 6 6 ."/>
+<line data=". . . . . . . . . . ."/>
+<line data="6 6 . . 6 6 . . 6 6 ."/>
+<line data=". . . . . . . . . . ."/>
+<line data=". . . . . . . . . . ."/>
+<line data=". . . . . . . . . . ."/>
+<line data=". . . . . . . . . . ."/>
+<line data=". . . . . . . . . . ."/>
+<line data=". 6 6 . . 6 6 . . 6 6"/>
+<line data=". . . . . . . . . . ."/>
+<line data=". 6 6 . . 6 6 . . 6 6"/>
+</mahjongg>

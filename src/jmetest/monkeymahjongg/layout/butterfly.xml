@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<mahjongg name="Butterfly" width="27" height="15" layers="4">
+<line data=".1.2.2.2. . . . . .2.2.2.1."/>
+<line data=". . 3 3 . . . . . . 3 3 . ."/>
+<line data=".1.2.2.2. . 232 . .2.2.2.1."/>
+<line data=". . . . . . . . . . . . . ."/>
+<line data=". . .1.2.1.1.1.1.1.2.1. . ."/>
+<line data=". . . . . . . . . . . . . ."/>
+<line data="2 2 . . .1.2.3.2.1. . . 2 2"/>
+<line data=". . . . . . . . . . . . . ."/>
+<line data="2 . . . 1 2 343 2 1 . . . 2"/>
+<line data=". . . . . . . . . . . . . ."/>
+<line data=". . 1 1 2 2 343 2 2 1 1 . ."/>
+<line data=". . . . . . . . . . . . . ."/>
+<line data="1 2 2 2 . 1 1 1 1 . 2 2 2 1"/>
+<line data=". .3.3. . . . . . . .3.3. ."/>
+<line data="1 2 2 2 . .2.3.2. . 2 2 2 1"/>
+</mahjongg>

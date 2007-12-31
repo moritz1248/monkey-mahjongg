@@ -20,15 +20,17 @@
  *
  *
  */
-
-
 package jmetest.monkeymahjongg;
 
+import com.jme.image.Image;
+import com.jme.image.Texture;
 import com.jme.input.MouseInput;
 import com.jme.renderer.ColorRGBA;
+import com.jme.scene.Skybox;
 import com.jme.system.GameSettings;
 import com.jme.system.PreferencesGameSettings;
 import com.jme.util.GameTaskQueueManager;
+import com.jme.util.TextureManager;
 import com.jmex.game.StandardGame;
 import com.jmex.game.state.GameState;
 import java.util.prefs.Preferences;
@@ -53,16 +55,13 @@ public class Main {
     private static Preferences preferences;
     private static GameSettings gameSettings;
     private static StandardGame standardGame;
-
     private static GameState backgroundGameState;
     private static GameState mainMenuGameState;
     private static GameState settingsMenuGameState;
     private static GameState levelMenuGameState;
-    private static GameState mahjonggGameState;
+    private static MahjonggGameState mahjonggGameState;
     private static CameraGameState cameraGameState;
-
     private static String menuPackage;
-    
     private static String layoutName = "standard";
 
     /**
@@ -82,28 +81,27 @@ public class Main {
         backgroundGameState = new BackgroundGameState("jmetest/monkeymahjongg/images/Monkey.jpg");
         GameStateManager.getInstance().attachChild(backgroundGameState);
         backgroundGameState.setActive(true);
-        
+
         cameraGameState = new CameraGameState();
         GameStateManager.getInstance().attachChild(cameraGameState);
         cameraGameState.setActive(true);
         cameraGameState.setFixed();
-        
+
         mahjonggGameState = new MahjonggGameState();
         GameStateManager.getInstance().attachChild(mahjonggGameState);
+        initSkybox();
 
         try {
             mainMenuGameState = (GameState) Class.forName(
-                "jmetest.monkeymahjongg.menu." + menuPackage 
-                + ".MainMenuGameState").newInstance();
+                    "jmetest.monkeymahjongg.menu." + menuPackage + ".MainMenuGameState").newInstance();
             GameStateManager.getInstance().attachChild(mainMenuGameState);
             mainMenuGameState.setActive(true);
-        
+
             Constructor settingsConstructor = Class.forName(
-            "jmetest.monkeymahjongg.menu." + menuPackage 
-                + ".SettingsMenuGameState").getConstructor(GameSettings.class);   
+                    "jmetest.monkeymahjongg.menu." + menuPackage + ".SettingsMenuGameState").getConstructor(GameSettings.class);
             settingsMenuGameState = (GameState) settingsConstructor.newInstance(gameSettings);
             GameStateManager.getInstance().attachChild(settingsMenuGameState);
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
             System.exit(-1);
@@ -139,19 +137,18 @@ public class Main {
         mahjonggGameState.setActive(true);
         cameraGameState.setMoveable();
     }
-    
+
     public static void stopLevel() {
         mainMenuGameState.setActive(true);
         backgroundGameState.setActive(true);
         mahjonggGameState.setActive(false);
         cameraGameState.setFixed();
     }
-    
-    
+
     public static void setLayoutName(String layoutName) {
         Main.layoutName = layoutName;
     }
-    
+
     public static Level getLevel() {
         return new Level("level/" + layoutName + ".xml");
     }
@@ -159,16 +156,36 @@ public class Main {
     public static void exit() {
         standardGame.shutdown();
     }
-    
-        public static void savePreferences() {
+
+    public static void savePreferences() {
         try {
             preferences.flush();
         } catch (BackingStoreException ex) {
-            //Logger.getLogger("global").log(Level.SEVERE, null, ex);
+        //Logger.getLogger("global").log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static void changeResolution() {
-        //standardGame.recreateGraphicalContext();
+    //standardGame.recreateGraphicalContext();
+    }
+
+    public static Skybox getSkybox(String... textures) {
+        Skybox skybox = new Skybox("skybox", 500, 500, 500);
+        for (int i = 0; i < 6; i++) {
+            Texture tex = TextureManager.loadTexture(MahjonggGameState.class.getClassLoader().getResource(textures[i]), Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR, Image.GUESS_FORMAT_NO_S3TC, 1, true);
+            skybox.setTexture(i, tex);
+        }
+        return skybox;
+    }
+
+    public static void initSkybox() {
+        Skybox skybox = getSkybox(
+                "jmetest/monkeymahjongg/images/sky/dg_north.png",
+                "jmetest/monkeymahjongg/images/sky/dg_south.png",
+                "jmetest/monkeymahjongg/images/sky/dg_east.png",
+                "jmetest/monkeymahjongg/images/sky/dg_west.png",
+                "jmetest/monkeymahjongg/images/sky/dg_up.png",
+                "jmetest/monkeymahjongg/images/sky/dg_down.png");
+        mahjonggGameState.getRootNode().attachChild(skybox);
     }
 }

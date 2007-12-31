@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<mahjongg name="Stairs" width="21" height="15" layers="5">
+<line data="5 4 4 3 3 2 2 1 1 . ."/>
+<line data=". . . . . . . . . . ."/>
+<line data="4 4 3 3 2 2 1 1 . . 1"/>
+<line data=". . . . . . . . . . ."/>
+<line data="4 3 3 2 2 1 1 . . 1 1"/>
+<line data=". . . . . . . . . . ."/>
+<line data="3 3 2 2 1 1 . . 1 1 2"/>
+<line data=". . . . . . . . . . ."/>
+<line data="3 2 2 1 1 . . 1 1 2 2"/>
+<line data=". . . . . . . . . . ."/>
+<line data="2 2 1 1 . . 1 1 2 2 3"/>
+<line data=". . . . . . . . . . ."/>
+<line data="2 1 1 . . 1 1 2 2 3 3"/>
+<line data=". . . . . . . . . . ."/>
+<line data="1 1 . . 1 1 2 2 3 3 4"/>
+</mahjongg>
