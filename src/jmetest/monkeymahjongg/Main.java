@@ -38,7 +38,6 @@ import jmetest.monkeymahjongg.menu.BackgroundGameState;
 import com.jmex.game.state.GameStateManager;
 import java.lang.reflect.Constructor;
 import java.util.concurrent.Callable;
-import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import jmetest.monkeymahjongg.game.CameraGameState;
 import jmetest.monkeymahjongg.game.Level;
@@ -169,16 +168,16 @@ public class Main {
     //standardGame.recreateGraphicalContext();
     }
 
-    public static Skybox getSkybox(String... textures) {
-        Skybox skybox = new Skybox("skybox", 500, 500, 500);
+    private static Skybox getSkybox(String... textures) {
+        Skybox sb = new Skybox("skybox", 500, 500, 500);
         for (int i = 0; i < 6; i++) {
             Texture tex = TextureManager.loadTexture(MahjonggGameState.class.getClassLoader().getResource(textures[i]), Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR, Image.GUESS_FORMAT_NO_S3TC, 1, true);
-            skybox.setTexture(i, tex);
+            sb.setTexture(i, tex);
         }
-        return skybox;
+        return sb;
     }
 
-    public static void initSkybox() {
+    private static void initSkybox() {
         Skybox skybox = getSkybox(
                 "jmetest/monkeymahjongg/images/sky/dg_north.png",
                 "jmetest/monkeymahjongg/images/sky/dg_south.png",

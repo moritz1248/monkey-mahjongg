@@ -96,7 +96,9 @@ public class MahjonggGameState extends BasicGameState {
         if (active) {
             init(Main.getLevel());
         } else {
+            Spatial sky = rootNode.getChild("skybox");
             rootNode.detachAllChildren();
+            rootNode.attachChild(sky);
             rootNode.removeController(1);
             rootNode.removeController(0);
         }
