@@ -32,6 +32,7 @@ import com.jme.input.controls.GameControlManager;
 import com.jme.light.PointLight;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
+import com.jme.scene.Node;
 import com.jme.scene.SharedMesh;
 import com.jme.scene.Spatial;
 import com.jme.scene.shape.Box;
@@ -201,5 +202,9 @@ public class MahjonggGameState extends BasicGameState {
 
     public GameControlManager getGameControlManager() {
         return gameControlManager;
+    }
+    
+    public Node getRootNode() {
+        return rootNode;
     }
 }
