@@ -75,7 +75,7 @@ public class BoxRemapper {
      * @param box the box
      */
     public void remap(Box box) {
-                FloatBuffer fb = box.getTextureBuffer(0, 0);
+                FloatBuffer fb = box.getTextureCoords(0).coords;
 		fb.rewind();
 		fb.put(tex);
     }

@@ -3,8 +3,6 @@
  *
  *  Copyright (c) 2007 Daniel Gronau
  *
- *  This file is part of KanjiTori.
- *
  *  Monkey Mahjongg is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 3 of the License, or
@@ -20,8 +18,6 @@
  *
  *
  */
-
-
 package jmetest.monkeymahjongg.game;
 
 import com.jme.input.MouseInput;
@@ -32,10 +28,7 @@ import com.jme.intersection.PickResults;
 import com.jme.math.Ray;
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
-import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Geometry;
-import com.jme.scene.batch.GeomBatch;
-import com.jme.scene.state.MaterialState;
 import com.jme.system.DisplaySystem;
 
 /**
@@ -44,43 +37,36 @@ import com.jme.system.DisplaySystem;
  */
 public class MousePickController extends MahjonggGameController {
 
-    private GameControl pick;
-
-    private PickResults pr;
+    private final GameControl pick;
+    private final PickResults pr;
     private boolean released = true;
 
     public MousePickController(MahjonggGameState mahjonggGameState) {
-         super(mahjonggGameState);
-         pick = mahjonggGameState.getGameControlManager().addControl("pick");
-         pick.addBinding(new MouseButtonBinding(0));
-
-         pr = new BoundingPickResults();
-         pr.setCheckDistance(true);
+        super(mahjonggGameState);
+        pick = mahjonggGameState.getGameControlManager().addControl("pick");
+        pick.addBinding(new MouseButtonBinding(0));
+        pr = new BoundingPickResults();
+        pr.setCheckDistance(true);
     }
 
     public void update(float time) {
-        if (pick.getValue() == 0) {
-            released = true;
-        }
+        released = (pick.getValue() == 0) ? true : released;
 
         if (released && pick.getValue() > 0) {
             released = false;
             MouseInput mouseInput = MouseInput.get();
             Vector2f screenPos = new Vector2f(mouseInput.getXAbsolute(),
-                                              mouseInput.getYAbsolute());
-			Vector3f worldCoords0 = DisplaySystem.getDisplaySystem().getWorldCoordinates(screenPos, 0);
-			Vector3f worldCoords1 = DisplaySystem.getDisplaySystem().getWorldCoordinates(screenPos, 1);
-			Ray mouseRay = new Ray(worldCoords0, worldCoords1
-					.subtractLocal(worldCoords0).normalizeLocal());
-			pr.clear();
+                    mouseInput.getYAbsolute());
+            Vector3f worldCoords0 = DisplaySystem.getDisplaySystem().getWorldCoordinates(screenPos, 0);
+            Vector3f worldCoords1 = DisplaySystem.getDisplaySystem().getWorldCoordinates(screenPos, 1);
+            Ray mouseRay = new Ray(worldCoords0, worldCoords1.subtractLocal(worldCoords0).normalizeLocal());
+            pr.clear();
             mahjonggGameState.getRootNode().findPick(mouseRay, pr);
 
             if (pr.getNumber() > 0) {
-				GeomBatch gb = pr.getPickData(0).getTargetMesh();
-                Geometry tile = gb.getParentGeom();
-				mahjonggGameState.getLevel().picked(tile);
-			}
+                Geometry tile = pr.getPickData(0).getTargetMesh();
+                mahjonggGameState.getLevel().picked(tile);
+            }
         }
     }
-
 }

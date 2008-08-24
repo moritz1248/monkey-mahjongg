@@ -38,13 +38,13 @@ import jmetest.monkeymahjongg.playground.model.Main;
  */
 public class SettingsMenuGameState  extends JMEDesktopState {
     
-    public static String[] FREQUENCIES = 
+    static final String[] FREQUENCIES =
             new String[]{"60", "70", "72", "75", "85", "100", "120", "140"};
-    public static String[] RESOLUTIONS = new String[]{"640x480", "800x600", 
+    static final String[] RESOLUTIONS = new String[]{"640x480", "800x600",
             "1024x768", "1280x1024", "1600x1200", "1440x900"};
-    public static int[] WIDTH = new int[]{640, 800, 1024, 1280, 1600, 1440};
-    public static int[] HEIGHTS = new int[]{480, 600, 768, 1024, 1200, 900};
-    public static String[] COLORS = new String[] {"16", "24" , "32"};     
+    static final int[] WIDTH = new int[]{640, 800, 1024, 1280, 1600, 1440};
+    static final int[] HEIGHTS = new int[]{480, 600, 768, 1024, 1200, 900};
+    static final String[] COLORS = new String[] {"16", "24" , "32"};
 
     private GameSettings gameSettings;
     private JComboBox resolutionBox;
@@ -132,7 +132,7 @@ public class SettingsMenuGameState  extends JMEDesktopState {
     }
 
     private void save() {
-        final JDesktopPane jDesktop = getDesktop().getJDesktop();
+        //final JDesktopPane jDesktop = getDesktop().getJDesktop();
         int width = WIDTH[resolutionBox.getSelectedIndex()];
         int height = HEIGHTS[resolutionBox.getSelectedIndex()];
         int depth = Integer.parseInt(COLORS[colorBox.getSelectedIndex()]);

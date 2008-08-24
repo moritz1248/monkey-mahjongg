@@ -21,7 +21,7 @@ import com.jme.util.TextureManager;
 
 public class UITile extends SharedMesh implements ITileListener {
 	private static final long serialVersionUID = 1L;
-	public static String TILE_USER_DATA = "tile";
+	public static final String TILE_USER_DATA = "tile";
 	private float dx = 3.5f;
 	private float dy = 5f;
 	private float dz = 1.5f;
@@ -47,7 +47,7 @@ public class UITile extends SharedMesh implements ITileListener {
 	private void setupCullState() {
 		CullState cs = DisplaySystem.getDisplaySystem().getRenderer()
 				.createCullState();
-		cs.setCullMode(CullState.CS_BACK);
+		cs.setCullFace(CullState.Face.Back);
 		setRenderState(cs);
 	}
 
@@ -67,8 +67,9 @@ public class UITile extends SharedMesh implements ITileListener {
 				.createTextureState();
 		Texture t = TextureManager.loadTexture(MahjonggGameState.class
 				.getClassLoader().getResource(texture),
-				Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR,
-				Image.GUESS_FORMAT_NO_S3TC, ts.getMaxAnisotropic(), true);
+				Texture.MinificationFilter.BilinearNearestMipMap,
+                                Texture.MagnificationFilter.Bilinear,
+				Image.Format.GuessNoCompression, ts.getMaxAnisotropic(), true);
 		ts.setTexture(t);
 		setRenderState(ts);
 	}

@@ -29,6 +29,7 @@ import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Skybox;
 import com.jme.system.GameSettings;
 import com.jme.system.PreferencesGameSettings;
+import com.jme.system.PropertiesGameSettings;
 import com.jme.util.GameTaskQueueManager;
 import com.jme.util.TextureManager;
 import com.jmex.game.StandardGame;
@@ -38,12 +39,14 @@ import jmetest.monkeymahjongg.menu.BackgroundGameState;
 import com.jmex.game.state.GameStateManager;
 import java.lang.reflect.Constructor;
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import jmetest.monkeymahjongg.game.CameraGameState;
 import jmetest.monkeymahjongg.game.Level;
 import jmetest.monkeymahjongg.game.MahjonggGameState;
-import jmetest.monkeymahjongg.menu.swingui.MainMenuGameState;
-import jmetest.monkeymahjongg.menu.swingui.SettingsMenuGameState;
+import static java.util.logging.Level.*; //avoids name clash
+//import jmetest.monkeymahjongg.menu.swingui.MainMenuGameState;
+//import jmetest.monkeymahjongg.menu.swingui.SettingsMenuGameState;
 
 /**
  *
@@ -57,11 +60,12 @@ public class Main {
     private static GameState backgroundGameState;
     private static GameState mainMenuGameState;
     private static GameState settingsMenuGameState;
-    private static GameState levelMenuGameState;
+    //private static GameState levelMenuGameState;
     private static MahjonggGameState mahjonggGameState;
     private static CameraGameState cameraGameState;
     private static String menuPackage;
     private static String layoutName = "standard";
+    private final static String SKY_PATH = "jmetest/monkeymahjongg/images/sky/";
 
     /**
      * @param args the command line arguments
@@ -160,31 +164,32 @@ public class Main {
         try {
             preferences.flush();
         } catch (BackingStoreException ex) {
-        //Logger.getLogger("global").log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(SEVERE, null, ex);
         }
     }
 
     public static void changeResolution() {
-    //standardGame.recreateGraphicalContext();
+        standardGame.recreateGraphicalContext();
     }
 
     private static Skybox getSkybox(String... textures) {
         Skybox sb = new Skybox("skybox", 500, 500, 500);
         for (int i = 0; i < 6; i++) {
-            Texture tex = TextureManager.loadTexture(MahjonggGameState.class.getClassLoader().getResource(textures[i]), Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR, Image.GUESS_FORMAT_NO_S3TC, 1, true);
-            sb.setTexture(i, tex);
+            Texture tex = TextureManager.loadTexture(
+                    MahjonggGameState.class.getClassLoader().getResource(
+                    SKY_PATH + textures[i]),
+                    Texture.MinificationFilter.BilinearNoMipMaps,
+                    Texture.MagnificationFilter.Bilinear,
+                    Image.Format.GuessNoCompression, 1, true);
+            sb.setTexture(Skybox.Face.values()[i], tex);
         }
         return sb;
     }
 
     private static void initSkybox() {
         Skybox skybox = getSkybox(
-                "jmetest/monkeymahjongg/images/sky/dg_north.png",
-                "jmetest/monkeymahjongg/images/sky/dg_south.png",
-                "jmetest/monkeymahjongg/images/sky/dg_east.png",
-                "jmetest/monkeymahjongg/images/sky/dg_west.png",
-                "jmetest/monkeymahjongg/images/sky/dg_up.png",
-                "jmetest/monkeymahjongg/images/sky/dg_down.png");
+                "dg_north.png", "dg_south.png", "dg_east.png",
+                "dg_west.png", "dg_up.png", "dg_down.png");
         mahjonggGameState.getRootNode().attachChild(skybox);
     }
 }

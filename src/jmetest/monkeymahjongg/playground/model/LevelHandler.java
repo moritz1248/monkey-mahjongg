@@ -8,7 +8,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class LevelHandler extends DefaultHandler {
 
 	private int line = 0;
-	String name;
+	//String name;
 	int width, height, depth;
 	Vector<String> lines = new Vector<String>(); 
 
@@ -19,7 +19,7 @@ public class LevelHandler extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) {
 		if ("mahjongg".equals(qName)) {
-			name = attributes.getValue("name");
+			//name = attributes.getValue("name");
 			width = Integer.valueOf(attributes.getValue("width"));
 			height = Integer.valueOf(attributes.getValue("height"));
 			depth = Integer.valueOf(attributes.getValue("layers"));

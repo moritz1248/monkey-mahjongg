@@ -30,6 +30,7 @@ import com.jme.light.PointLight;
 import com.jme.math.FastMath;
 import com.jme.math.Quaternion;
 import com.jme.math.Vector3f;
+import com.jme.renderer.Camera;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Controller;
 import com.jme.scene.Spatial;
@@ -47,55 +48,54 @@ import com.jmex.game.state.BasicGameState;
  */
 public class BackgroundGameState extends BasicGameState {
 
-    private Box box;
-    private Vector3f cameraLocation;
-    private Vector3f cameraDirection;
+    private final Box box;
+    private final Vector3f cameraLocation;
+    private final Vector3f cameraDirection;
     
     public BackgroundGameState(String texture) {
         super("background");
-        init(texture);
-    }
-
-    private void init(String texture) {
         box = new Box("my box", new Vector3f(0, 0, 0), 5, 5, 5);
         
-        MaterialState ms = DisplaySystem.getDisplaySystem().getRenderer().createMaterialState();
+        final MaterialState ms = DisplaySystem.getDisplaySystem().getRenderer().createMaterialState();
         ms.setEmissive(new ColorRGBA(0.5f, 0.5f, 0.5f, 1));
         box.setRenderState(ms);
-        TextureState ts = DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
-        Texture t = TextureManager.loadTexture(BasicGameState.class.getClassLoader().getResource(
-            texture), Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR); 
+        final TextureState ts = DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
+        final Texture t = TextureManager.loadTexture(
+                BasicGameState.class.getClassLoader().getResource(texture),
+                Texture.MinificationFilter.BilinearNoMipMaps,
+                Texture.MagnificationFilter.Bilinear);
         ts.setTexture(t);
         box.setRenderState(ts);
         box.setModelBound(new BoundingBox());
         box.updateModelBound();
         getRootNode().attachChild(box);
 
-        PointLight light = new PointLight();
+        final PointLight light = new PointLight();
         light.setDiffuse(new ColorRGBA(0.75f, 0.75f, 0.75f, 0.75f));
         light.setAmbient(new ColorRGBA(0.5f, 0.5f, 0.5f, 1.0f));
         light.setLocation(new Vector3f(100, 100, 100));
         light.setEnabled(true);
         
-        LightState lightState = DisplaySystem.getDisplaySystem().getRenderer().createLightState();
+        final LightState lightState = DisplaySystem.getDisplaySystem().getRenderer().createLightState();
         lightState.setEnabled(true);
         lightState.attach(light);
         getRootNode().setRenderState(lightState);
         
         getRootNode().updateRenderState();
-
         getRootNode().addController(new RotController(box, new Vector3f(1, 1, 0.5f), 25));
         
-        cameraLocation = DisplaySystem.getDisplaySystem().getRenderer().getCamera().getLocation();
-        cameraDirection = DisplaySystem.getDisplaySystem().getRenderer().getCamera().getDirection();
+        final Camera camera = DisplaySystem.getDisplaySystem().getRenderer().getCamera();
+        cameraLocation = camera.getLocation();
+        cameraDirection = camera.getDirection();
     }
     
     @Override
     public void setActive(boolean active) {
         super.setActive(active);
         if (active) {
-            DisplaySystem.getDisplaySystem().getRenderer().getCamera().setLocation(cameraLocation);
-            DisplaySystem.getDisplaySystem().getRenderer().getCamera().setDirection(cameraDirection);
+            final Camera camera = DisplaySystem.getDisplaySystem().getRenderer().getCamera();
+            camera.setLocation(cameraLocation);
+            camera.setDirection(cameraDirection);
         }
     }
     
@@ -103,10 +103,10 @@ public class BackgroundGameState extends BasicGameState {
 		private static final long serialVersionUID = 1L;
 
         private float angle = 0;
-        private Spatial s;
-        private int speed;
-        private Quaternion rotQuat = new Quaternion();
-        private Vector3f axis;
+        private final Spatial s;
+        private final int speed;
+        private final Quaternion rotQuat = new Quaternion();
+        private final Vector3f axis;
 
         public RotController(Spatial s, Vector3f axis, int speed) {
             this.s = s;
@@ -117,11 +117,8 @@ public class BackgroundGameState extends BasicGameState {
         public void update(float time) {
             if (time < 0.1) {
                 angle += time * speed;
-                if (angle > 360) {
-                    angle = 0;
-                }
+                angle = (angle > 360) ? 0 : angle;
             }
-
             rotQuat.fromAngleNormalAxis(angle * FastMath.DEG_TO_RAD, axis);
             s.setLocalRotation(rotQuat);
         }
