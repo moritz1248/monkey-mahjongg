@@ -111,7 +111,11 @@ public class TileViewer extends SimpleGame {
         ms.setEmissive(ColorRGBA.white);
         tile.setRenderState(ms);
         TextureState ts = DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
-        Texture t = TextureManager.loadTexture(MahjonggGameState.class.getClassLoader().getResource(tex), Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR, Image.GUESS_FORMAT_NO_S3TC, ts.getMaxAnisotropic(), true);
+        Texture t = TextureManager.loadTexture(
+                MahjonggGameState.class.getClassLoader().getResource(tex),
+                Texture.MinificationFilter.BilinearNoMipMaps,
+                Texture.MagnificationFilter.Bilinear,
+                Image.Format.GuessNoCompression, ts.getMaxAnisotropic(), true);
         ts.setTexture(t);
         tile.setRenderState(ts);
         tile.updateRenderState();
@@ -137,7 +141,7 @@ public class TileViewer extends SimpleGame {
     
     public static void main(String... args) {
         TileViewer app = new TileViewer();
-        app.setDialogBehaviour(ALWAYS_SHOW_PROPS_DIALOG);
+        app.setConfigShowMode(SimpleGame.ConfigShowMode.AlwaysShow);
         app.start();
     }
 }    

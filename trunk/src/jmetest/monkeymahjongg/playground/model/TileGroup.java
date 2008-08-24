@@ -1,5 +1,9 @@
 package jmetest.monkeymahjongg.playground.model;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 
 public abstract class TileGroup {
 
@@ -48,17 +52,18 @@ public abstract class TileGroup {
 		return null;
 	}
 
-	@Override
+	/* unnecessary, that's already done in Object.equals
+        @Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		return false;
-	}
+	}*/
 
 	 
 	public abstract String getTextureResource( Tile tile );
 
-	public Tile[] getTiles() {
-		return tiles;
+	public List<Tile> getTiles() {
+		return Collections.unmodifiableList(Arrays.asList(tiles));
 	} 
 }

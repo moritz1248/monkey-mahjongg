@@ -20,8 +20,6 @@
  *
  *
  */
-
-
 package jmetest.monkeymahjongg.menu.swingui;
 
 import com.jmex.awt.swingui.JMEDesktopState;
@@ -46,10 +44,13 @@ import jmetest.monkeymahjongg.Main;
  */
 public class MainMenuGameState extends JMEDesktopState {
 
-    private Action settingsAction = new AbstractAction() {
-		private static final long serialVersionUID = 1L;
+    private final static String[] LAYOUTS = 
+      {"Standard", "Block", "Butterfly", "Castle", "Diamonds", "Stairs", "Towers"};
+    private final Action settingsAction = new AbstractAction() {
 
-		{
+        private static final long serialVersionUID = 1L;
+
+        {
             putValue(NAME, "Settings");
             putValue(SHORT_DESCRIPTION, "Settings Button");
         }
@@ -59,8 +60,10 @@ public class MainMenuGameState extends JMEDesktopState {
         }
     };
 
-    private Action startAction = new AbstractAction() {
-		private static final long serialVersionUID = 1L;
+    private final Action startAction = new AbstractAction() {
+
+        private static final long serialVersionUID = 1L;
+
         {
             putValue(NAME, "Start");
             putValue(SHORT_DESCRIPTION, "Starts the game, using the selected layout");
@@ -71,8 +74,10 @@ public class MainMenuGameState extends JMEDesktopState {
         }
     };
 
-    private Action exitAction = new AbstractAction() {
-		private static final long serialVersionUID = 1L;
+    private final Action exitAction = new AbstractAction() {
+
+        private static final long serialVersionUID = 1L;
+
         {
             putValue(NAME, "Exit");
             putValue(SHORT_DESCRIPTION, "Exits this game");
@@ -82,47 +87,44 @@ public class MainMenuGameState extends JMEDesktopState {
             Main.exit();
         }
     };
-    
-    private Action[] actions = new Action[]{
-        settingsAction, startAction, exitAction};
 
+    private final Action[] actions = new Action[]{settingsAction, startAction, exitAction};
 
     public MainMenuGameState() {
         super(true);
-        JDesktopPane jDesktop = getDesktop().getJDesktop();
-        
+        final JDesktopPane jDesktop = getDesktop().getJDesktop();
+
         for (int i = 0; i < actions.length; i++) {
-            JButton button = new JButton(actions[i]);
+            final JButton button = new JButton(actions[i]);
             button.setSize(100, 20);
-            button.setLocation(50, 50 + 50*i);
+            button.setLocation(50, 50 + 50 * i);
             jDesktop.add(button);
         }
 
-        JLabel label = new JLabel("Layout:");
+        final JLabel label = new JLabel("Layout:");
         label.setSize(100, 15);
         label.setLocation(50, 280);
         label.setForeground(Color.white);
         jDesktop.add(label);
         final JList layoutList = new JList(getLayouts());
         layoutList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        layoutList.addListSelectionListener(new ListSelectionListener(){
+        layoutList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 Main.setLayoutName(layoutList.getSelectedValue().toString().toLowerCase());
             }
         });
         layoutList.setSelectedIndex(0);
         JScrollPane scrollPane = new JScrollPane(layoutList);
-        scrollPane.setSize(100,120);
+        scrollPane.setSize(100, 130);
         scrollPane.setLocation(50, 300);
         jDesktop.add(scrollPane);
-        
+
         jDesktop.invalidate();
         jDesktop.validate();
         jDesktop.repaint();
     }
-    
+
     private String[] getLayouts() {
-        return new String[] 
-           {"Standard", "Block", "Butterfly", "Castle", "Stairs", "Towers"};
+        return LAYOUTS;
     }
 }

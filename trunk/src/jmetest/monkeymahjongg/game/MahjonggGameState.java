@@ -20,7 +20,6 @@
  *
  *
  */
-
 package jmetest.monkeymahjongg.game;
 
 import java.nio.FloatBuffer;
@@ -35,7 +34,6 @@ import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Node;
 import com.jme.scene.SharedMesh;
 import com.jme.scene.Spatial;
-import com.jme.scene.shape.Box;
 import com.jme.scene.shape.RoundedBox;
 import com.jme.scene.state.CullState;
 import com.jme.scene.state.LightState;
@@ -45,45 +43,39 @@ import com.jme.system.DisplaySystem;
 import com.jme.util.TextureManager;
 import com.jmex.game.state.BasicGameState;
 
-/**
- *
- * @author Pirx
- */
 public class MahjonggGameState extends BasicGameState {
 
-    public static String TILE_USER_DATA = "tile";
-
-    private static float BORDER = 0.2f;
-    private static float SLOPE = 0.1f;
-    private static float RATIO = 0.5f * BORDER / (1 + SLOPE);
-    private static float TEX = 0.7f;
-    
-	private static float[] picture = new float[] { 
+    public static final String TILE_USER_DATA = "tile";
+    private static final float BORDER = 0.2f;
+    private static final float SLOPE = 0.1f;
+    private static final float RATIO = 0.5f * BORDER / (1 + SLOPE);
+    private static final float TEX = 0.7f;
+    private static final float[] picture = new float[]{
         TEX, 0,
-        0, 0, 
-        TEX, 1, 
+        0, 0,
+        TEX, 1,
         0, 1,
-        TEX*(1-RATIO), RATIO,
-        TEX*RATIO, RATIO,
-        TEX*(1-RATIO), 1-RATIO,
-        TEX*RATIO, 1-RATIO};
-
-	private static float[] border = new float[] { 
+        TEX * (1 - RATIO), RATIO,
+        TEX * RATIO, RATIO,
+        TEX * (1 - RATIO), 1 - RATIO,
+        TEX * RATIO, 1 - RATIO
+    };
+    private static final float[] border = new float[]{
         1, 0,
-        TEX, 0, 
+        TEX, 0,
         1, 1,
-        TEX, 1, 
-        1 - (1-TEX)*RATIO, RATIO,
-        TEX + (1-TEX)*RATIO, RATIO,
-        1 - (1-TEX)*RATIO, 1-RATIO,
-        TEX + (1-TEX)*RATIO, 1-RATIO};
-
-    private float dx = 3.5F;
-    private float dy = 5.0F;
-    private float dz = 1.5F;
+        TEX, 1,
+        1 - (1 - TEX) * RATIO, RATIO,
+        TEX + (1 - TEX) * RATIO, RATIO,
+        1 - (1 - TEX) * RATIO, 1 - RATIO,
+        TEX + (1 - TEX) * RATIO, 1 - RATIO
+    };
+    
+    private final static float dx = 3.5F;
+    private final static float dy = 5.0F;
+    private final static float dz = 1.5F;
 
     private GameControlManager gameControlManager;
-
     private Level level;
 
     public MahjonggGameState() {
@@ -109,10 +101,10 @@ public class MahjonggGameState extends BasicGameState {
 
         this.level = level;
         initLight();
-        
+
         Vector3f size = new Vector3f(dx, dy, dz);
         RoundedBox box = new RoundedBox("box", size, size.mult(BORDER), size.mult(SLOPE));
-        FloatBuffer fb = box.getTextureBuffer(0, 0);
+        FloatBuffer fb = box.getTextureCoords(0).coords;
         fb.rewind();
         fb.put(border);
         fb.put(picture);
@@ -121,7 +113,7 @@ public class MahjonggGameState extends BasicGameState {
         fb.put(border);
         fb.put(border);
 
-         
+
         for (int x = 0; x < level.getWidth(); x++) {
             for (int y = 0; y < level.getHeight(); y++) {
                 for (int z = 0; z < level.getLayers(); z++) {
@@ -131,9 +123,9 @@ public class MahjonggGameState extends BasicGameState {
                         tile.setUserData(TILE_USER_DATA, new TileData(x, y, z, tileId));
                         setState(tile, tileId);
                         rootNode.attachChild(tile);
-						Vector3f translation = new Vector3f(
-                                dx	* (x - level.getWidth() / 2f) + dx / 2, 
-                                dy * (level.getHeight() / 2f - y) - 0.5f * dy, 
+                        Vector3f translation = new Vector3f(
+                                dx * (x - level.getWidth() / 2f) + dx / 2,
+                                dy * (level.getHeight() / 2f - y) - 0.5f * dy,
                                 2 * dz * z);
                         tile.setLocalTranslation(translation);
                         tile.setModelBound(new BoundingBox());
@@ -169,12 +161,16 @@ public class MahjonggGameState extends BasicGameState {
         ms.setEmissive(ColorRGBA.white);
         tile.setRenderState(ms);
         TextureState ts = DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
-        Texture t = TextureManager.loadTexture(MahjonggGameState.class.getClassLoader().getResource(tex), Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR, Image.GUESS_FORMAT_NO_S3TC, ts.getMaxAnisotropic(), true);
+        Texture t = TextureManager.loadTexture(
+                MahjonggGameState.class.getClassLoader().getResource(tex),
+                Texture.MinificationFilter.BilinearNoMipMaps,
+                Texture.MagnificationFilter.Bilinear,
+                Image.Format.GuessNoCompression, ts.getMaxAnisotropic(), true);
         ts.setTexture(t);
         tile.setRenderState(ts);
 
         CullState cs = DisplaySystem.getDisplaySystem().getRenderer().createCullState();
-        cs.setCullMode(CullState.CS_BACK);
+        cs.setCullFace(CullState.Face.Back);
         tile.setRenderState(cs);
     }
 
@@ -205,7 +201,7 @@ public class MahjonggGameState extends BasicGameState {
     public GameControlManager getGameControlManager() {
         return gameControlManager;
     }
-    
+
     public Node getRootNode() {
         return rootNode;
     }

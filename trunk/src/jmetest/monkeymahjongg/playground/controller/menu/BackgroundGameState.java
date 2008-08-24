@@ -63,8 +63,10 @@ public class BackgroundGameState extends BasicGameState {
         ms.setEmissive(new ColorRGBA(0.5f, 0.5f, 0.5f, 1));
         box.setRenderState(ms);
         TextureState ts = DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
-        Texture t = TextureManager.loadTexture(BasicGameState.class.getClassLoader().getResource(
-            texture), Texture.MM_LINEAR_LINEAR, Texture.FM_LINEAR); 
+        Texture t = TextureManager.loadTexture(
+                BasicGameState.class.getClassLoader().getResource(texture),
+                Texture.MinificationFilter.BilinearNoMipMaps,
+                Texture.MagnificationFilter.Bilinear); 
         ts.setTexture(t);
         box.setRenderState(ts);
         box.setModelBound(new BoundingBox());

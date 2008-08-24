@@ -37,19 +37,19 @@ import jmetest.monkeymahjongg.Main;
  */
 public class SettingsMenuGameState  extends JMEDesktopState {
     
-    public static String[] FREQUENCIES = 
-            new String[]{"60", "70", "72", "75", "85", "100", "120", "140"};
-    public static String[] RESOLUTIONS = new String[]{"640x480", "800x600", 
+    static final String[] FREQUENCIES = 
+            {"60", "70", "72", "75", "85", "100", "120", "140"};
+    static final String[] RESOLUTIONS = {"640x480", "800x600", 
             "1024x768", "1280x1024", "1600x1200", "1440x900"};
-    public static int[] WIDTH = new int[]{640, 800, 1024, 1280, 1600, 1440};
-    public static int[] HEIGHTS = new int[]{480, 600, 768, 1024, 1200, 900};
-    public static String[] COLORS = new String[] {"16", "24" , "32"};     
+    static final int[] WIDTH = {640, 800, 1024, 1280, 1600, 1440};
+    static final int[] HEIGHTS = {480, 600, 768, 1024, 1200, 900};
+    static final String[] COLORS = {"16", "24" , "32"};
 
-    private GameSettings gameSettings;
-    private JComboBox resolutionBox;
-    private JComboBox colorBox;
-    private JComboBox frequencyBox;
-    private JCheckBox fullscreenBox;
+    private final GameSettings gameSettings;
+    private final JComboBox resolutionBox = new JComboBox();
+    private final JComboBox colorBox = new JComboBox();
+    private final JComboBox frequencyBox = new JComboBox();
+    private final JCheckBox fullscreenBox = new JCheckBox();
     
     public SettingsMenuGameState(GameSettings gameSettings) {
         super(gameSettings.getWidth(), gameSettings.getHeight());
@@ -67,24 +67,22 @@ public class SettingsMenuGameState  extends JMEDesktopState {
         JDesktopPane jDesktop = getDesktop().getJDesktop();
 
         setJLabel("Resolution", new Point(50, 50));
-        setJComboBox(resolutionBox = new JComboBox(), RESOLUTIONS, new Point(200, 50));
+        setJComboBox(resolutionBox, RESOLUTIONS, new Point(200, 50));
 
         setJLabel("Color Bits", new Point(50, 100));
-        setJComboBox(colorBox = new JComboBox(), COLORS, new Point(200, 100));
+        setJComboBox(colorBox, COLORS, new Point(200, 100));
 
         setJLabel("Frequency", new Point(50, 150));
-        setJComboBox(frequencyBox = new JComboBox(), FREQUENCIES, new Point(200, 150));
+        setJComboBox(frequencyBox, FREQUENCIES, new Point(200, 150));
 
         setJLabel("Fullscreen", new Point(50, 200));
-        fullscreenBox = new JCheckBox();
         jDesktop.add(fullscreenBox);
         fullscreenBox.setSize(20,20);
         fullscreenBox.setLocation(200, 200);
         
-        JButton okButton = new JButton("OK");
+        final JButton okButton = new JButton("OK");
         jDesktop.add(okButton);
         okButton.addActionListener(new ActionListener() {
-
             public void actionPerformed(ActionEvent ae) {
                 save();
             }
@@ -92,7 +90,7 @@ public class SettingsMenuGameState  extends JMEDesktopState {
         okButton.setSize(100,20);
         okButton.setLocation(50, 250);
 
-        JButton cancelButton = new JButton("Cancel");
+        final JButton cancelButton = new JButton("Cancel");
         jDesktop.add(cancelButton);
         cancelButton.addActionListener(new ActionListener() {
 
@@ -131,7 +129,7 @@ public class SettingsMenuGameState  extends JMEDesktopState {
     }
 
     private void save() {
-        final JDesktopPane jDesktop = getDesktop().getJDesktop();
+        //final JDesktopPane jDesktop = getDesktop().getJDesktop();
         int width = WIDTH[resolutionBox.getSelectedIndex()];
         int height = HEIGHTS[resolutionBox.getSelectedIndex()];
         int depth = Integer.parseInt(COLORS[colorBox.getSelectedIndex()]);
@@ -179,7 +177,7 @@ public class SettingsMenuGameState  extends JMEDesktopState {
     private void showMessageDialog(String title, String message, int messageType) {
         final JMEDesktop desktop = getDesktop();
         final JInternalFrame modalDialog = new JInternalFrame(title);
-        JOptionPane optionPane = new JOptionPane(message, messageType);
+        final JOptionPane optionPane = new JOptionPane(message, messageType);
         modalDialog.getContentPane().add(optionPane);
         desktop.setModalComponent(modalDialog);
         desktop.getJDesktop().add(modalDialog, 0);

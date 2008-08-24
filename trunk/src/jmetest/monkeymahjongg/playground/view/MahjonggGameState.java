@@ -116,8 +116,8 @@ public class MahjonggGameState extends BasicGameState {
 		Vector3f extent = new Vector3f(dx, dy, dz);
 		RoundedBox box = new RoundedBox("box", extent, extent.mult(BORDER),
 				extent.mult(SLOPE));
-		FloatBuffer fb = box.getTextureBuffer(0, 0);
-		fb.rewind();
+		FloatBuffer fb = box.getTextureCoords(0).coords;
+                fb.rewind();
 		fb.put(border);
 		fb.put(picture);
 		fb.put(border);

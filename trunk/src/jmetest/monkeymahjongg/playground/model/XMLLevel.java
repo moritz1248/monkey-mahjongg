@@ -4,28 +4,33 @@ import java.io.IOException;
 import java.util.Vector;
 
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.sun.org.apache.xerces.internal.parsers.SAXParser;
-
 public class XMLLevel {
 
 	private LevelHandler levelHandler;
+        private final static SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
 
 	public XMLLevel( String fileName )
 	{
         try {
-            XMLReader xmlReader = new SAXParser();
+            XMLReader xmlReader = PARSER_FACTORY.newSAXParser().getXMLReader();
             levelHandler = new LevelHandler();
 			xmlReader.setContentHandler(levelHandler);
             InputSource is = new InputSource(new java.io.FileInputStream(fileName));
             xmlReader.parse(is);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(XMLLevel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            System.exit(-1);
+            Logger.getLogger(XMLLevel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            System.exit(-1);
+            Logger.getLogger(XMLLevel.class.getName()).log(Level.SEVERE, null, ex);
         }
 	}
 

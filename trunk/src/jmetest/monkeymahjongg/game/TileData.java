@@ -35,26 +35,32 @@ import java.io.IOException;
  */
  class TileData implements Savable {
 
-    private int[] data; 
+    final private int x;
+    final private int y;
+    final private int z;
+    final private int tileId;
      
     public TileData(int x, int y, int z, int tileId) {
-        data = new int[]{x, y, z, tileId};
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.tileId = tileId;
     }
     
     public int getX() {
-        return data[0];
+        return x;
     }
 
     public int getY() {
-        return data[1];
+        return y;
     }
     
     public int getZ() {
-        return data[2];
+        return z;
     }
     
     public int getTileId() {
-        return data[3];
+        return tileId;
     }
 
     public void write(JMEExporter ex) throws IOException {
@@ -71,7 +77,7 @@ import java.io.IOException;
     
     @Override
     public String toString() {
-        return String.format("tile %d, x:%d y:%d z:%d", getTileId(), getX(), getY(), getZ());
+        return String.format("tile %d, x:%d y:%d z:%d", tileId, x, y, z);
     }
 
 }
