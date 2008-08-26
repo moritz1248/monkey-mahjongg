@@ -113,15 +113,15 @@ public class MahjonggGameState extends BasicGameState {
         fb.put(border);
         fb.put(border);
 
-
         for (int x = 0; x < level.getWidth(); x++) {
             for (int y = 0; y < level.getHeight(); y++) {
                 for (int z = 0; z < level.getLayers(); z++) {
-                    if (level.isTile(x, y, z)) {
-                        int tileId = level.getTile(x, y, z);
+                    Coordinate c = Coordinate.at(x,y,z);
+                    if (level.isTile(c)) {
                         SharedMesh tile = new SharedMesh("tile", box);
-                        tile.setUserData(TILE_USER_DATA, new TileData(x, y, z, tileId));
-                        setState(tile, tileId);
+                        TileData td = level.getTile(c);
+                        tile.setUserData(TILE_USER_DATA, td);
+                        setState(tile, td);
                         rootNode.attachChild(tile);
                         Vector3f translation = new Vector3f(
                                 dx * (x - level.getWidth() / 2f) + dx / 2,
@@ -138,7 +138,8 @@ public class MahjonggGameState extends BasicGameState {
         rootNode.updateRenderState();
     }
 
-    private void setState(Spatial tile, int tileId) {
+    private void setState(Spatial tile, TileData tileData) {
+        int tileId = tileData.getTileId();
         String tex = "jmetest/monkeymahjongg/images/";
         if (tileId < 36) {
             tex += "banana" + ((tileId / 4) + 1);

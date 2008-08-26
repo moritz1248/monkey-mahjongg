@@ -29,7 +29,7 @@ import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Skybox;
 import com.jme.system.GameSettings;
 import com.jme.system.PreferencesGameSettings;
-import com.jme.system.PropertiesGameSettings;
+//import com.jme.system.PropertiesGameSettings;
 import com.jme.util.GameTaskQueueManager;
 import com.jme.util.TextureManager;
 import com.jmex.game.StandardGame;
@@ -43,6 +43,7 @@ import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import jmetest.monkeymahjongg.game.CameraGameState;
 import jmetest.monkeymahjongg.game.Level;
+import jmetest.monkeymahjongg.game.LevelProvider;
 import jmetest.monkeymahjongg.game.MahjonggGameState;
 import static java.util.logging.Level.*; //avoids name clash
 //import jmetest.monkeymahjongg.menu.swingui.MainMenuGameState;
@@ -153,7 +154,7 @@ public class Main {
     }
 
     public static Level getLevel() {
-        return new Level("level/" + layoutName + ".xml");
+        return LevelProvider.load("level/" + layoutName + ".xml");
     }
 
     public static void exit() {
