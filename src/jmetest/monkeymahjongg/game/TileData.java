@@ -31,32 +31,21 @@ import java.io.IOException;
 
 /**
  *
+ *
  * @author Pirx
  */
  class TileData implements Savable {
 
-    final private int x;
-    final private int y;
-    final private int z;
+    final private Coordinate c;
     final private int tileId;
      
     public TileData(int x, int y, int z, int tileId) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.c = Coordinate.at(x, y, z);
         this.tileId = tileId;
     }
     
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-    
-    public int getZ() {
-        return z;
+    public Coordinate getCoordinate() {
+        return c;
     }
     
     public int getTileId() {
@@ -77,7 +66,21 @@ import java.io.IOException;
     
     @Override
     public String toString() {
-        return String.format("tile %d, x:%d y:%d z:%d", tileId, x, y, z);
+        return String.format("tile %d, %s", tileId, c);
+    }
+    
+    public boolean matches(TileData that) {
+        return (this.tileId ^ that.tileId) < 4;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof TileData) ? tileId == ((TileData)o).tileId : false;
+    }
+
+    @Override
+    public int hashCode() {
+        return tileId;
     }
 
 }
