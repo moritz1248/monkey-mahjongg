@@ -77,7 +77,7 @@ public final class LevelProvider {
     
     private static class LevelHandler extends DefaultHandler {
 
-        private final List<Integer> list = new ArrayList<Integer>();
+        private final List<Integer> list = new ArrayList<Integer>(144);
 
         private int line = 0;
         private String name;
@@ -107,7 +107,7 @@ public final class LevelProvider {
                     if ('1' <= c && c <= '9') {
                         final int n = c - '1';
                         for (int z = 0; z <= n; z++) {
-                            Coordinate co = Coordinate.at(x, line, z);
+                            final Coordinate co = Coordinate.at(x, line, z);
                             if (! tiles.containsKey(co.add(-1,-1, 0))
                              && ! tiles.containsKey(co.add( 0,-1, 0))
                              && ! tiles.containsKey(co.add( 1,-1, 0)) 
