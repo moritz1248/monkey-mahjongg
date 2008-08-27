@@ -54,17 +54,17 @@ public class MousePickController extends MahjonggGameController {
 
         if (released && pick.getValue() > 0) {
             released = false;
-            MouseInput mouseInput = MouseInput.get();
-            Vector2f screenPos = new Vector2f(mouseInput.getXAbsolute(),
+            final MouseInput mouseInput = MouseInput.get();
+            final Vector2f screenPos = new Vector2f(mouseInput.getXAbsolute(),
                     mouseInput.getYAbsolute());
-            Vector3f worldCoords0 = DisplaySystem.getDisplaySystem().getWorldCoordinates(screenPos, 0);
-            Vector3f worldCoords1 = DisplaySystem.getDisplaySystem().getWorldCoordinates(screenPos, 1);
-            Ray mouseRay = new Ray(worldCoords0, worldCoords1.subtractLocal(worldCoords0).normalizeLocal());
+            final Vector3f worldCoords0 = DisplaySystem.getDisplaySystem().getWorldCoordinates(screenPos, 0);
+            final Vector3f worldCoords1 = DisplaySystem.getDisplaySystem().getWorldCoordinates(screenPos, 1);
+            final Ray mouseRay = new Ray(worldCoords0, worldCoords1.subtractLocal(worldCoords0).normalizeLocal());
             pr.clear();
             mahjonggGameState.getRootNode().findPick(mouseRay, pr);
 
             if (pr.getNumber() > 0) {
-                Geometry tile = pr.getPickData(0).getTargetMesh();
+                final Geometry tile = pr.getPickData(0).getTargetMesh();
                 mahjonggGameState.getLevel().picked(tile);
             }
         }

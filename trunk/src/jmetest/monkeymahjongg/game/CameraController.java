@@ -22,12 +22,14 @@
  */
 package jmetest.monkeymahjongg.game;
 
-import com.jme.input.KeyInput;
 import com.jme.input.controls.GameControl;
 import com.jme.input.controls.GameControlManager;
 import com.jme.input.controls.binding.KeyboardBinding;
-import com.jme.math.Quaternion;
 import com.jme.scene.Controller;
+
+import static com.jme.input.KeyInput.*;
+import static com.jme.math.FastMath.clamp;
+import static jmetest.monkeymahjongg.game.CameraController.Direction.*;
 
 /**
  * 
@@ -36,55 +38,49 @@ import com.jme.scene.Controller;
 class CameraController extends Controller {
 
     private static final long serialVersionUID = 1L;
+    
+    enum Direction {LEFT, RIGHT, UP, DOWN, FORWARD, BACK};
+    
     private final static float MIN_ANGLE = 1.2f;
     private final static float MIN_DISTANCE = 35f;
     private final static float MAX_DISTANCE = 150f;
     private final static float SPEED = 2f;
-    private final GameControl left;
-    private final GameControl right;
-    private final GameControl up;
-    private final GameControl down;
-    private final GameControl forward;
-    private final GameControl backward;
+    private final GameControlManager manager = new GameControlManager();
     private final CameraGameState gameState;
+    
     private float vAngle = 0;
     private float hAngle = 0;
     private float distance = 100;
 
     public CameraController(CameraGameState gameState) {
-
         this.gameState = gameState;
 
-        GameControlManager manager = new GameControlManager();
-        left = manager.addControl("left");
-        left.addBinding(new KeyboardBinding(KeyInput.KEY_LEFT));
-        right = manager.addControl("right");
-        right.addBinding(new KeyboardBinding(KeyInput.KEY_RIGHT));
-        up = manager.addControl("up");
-        up.addBinding(new KeyboardBinding(KeyInput.KEY_UP));
-        down = manager.addControl("down");
-        down.addBinding(new KeyboardBinding(KeyInput.KEY_DOWN));
-        forward = manager.addControl("forward");
-        forward.addBinding(new KeyboardBinding(KeyInput.KEY_PGUP));
-        backward = manager.addControl("backward");
-        backward.addBinding(new KeyboardBinding(KeyInput.KEY_PGDN));
+        bind(LEFT, KEY_LEFT);
+        bind(RIGHT, KEY_RIGHT);
+        bind(UP, KEY_UP);
+        bind(DOWN, KEY_DOWN);
+        bind(FORWARD, KEY_PGUP, KEY_ADD);
+        bind(BACK, KEY_PGDN, KEY_SUBTRACT);
+    }
+    
+    private void bind(Direction direction, int... keys) {
+        final GameControl control = manager.addControl(direction.name());
+        for (int key : keys) {
+          control.addBinding(new KeyboardBinding(key));
+        }
+    }
+    
+    private float value(Direction direction) {
+        return manager.getControl(direction.name()).getValue();
     }
 
     public void update(float time) {
-        final float newHAngle = hAngle + SPEED * time * (right.getValue() - left.getValue());
-        if (-MIN_ANGLE < newHAngle && newHAngle < MIN_ANGLE) {
-            hAngle = newHAngle;
-        }
-        final float newVAngle = vAngle + SPEED * time * (down.getValue() - up.getValue());
-        if (-MIN_ANGLE < newVAngle && newVAngle < MIN_ANGLE) {
-            vAngle = newVAngle;
-        }
-        gameState.getCameraRotationNode().setLocalRotation(
-                new Quaternion(new float[]{vAngle, hAngle, 0f}));
-        final float newDist = distance + 20 * SPEED * time * (backward.getValue() - forward.getValue());
-        if (MIN_DISTANCE < newDist && newDist < MAX_DISTANCE) {
-            distance = newDist;
-        }
+        final float way = SPEED * time;
+        hAngle = clamp(hAngle + way * (value(RIGHT) - value(LEFT)), -MIN_ANGLE, MIN_ANGLE);
+        vAngle = clamp(vAngle + way * (value(DOWN) - value(UP)), -MIN_ANGLE, MIN_ANGLE);
+        gameState.getCameraRotationNode().getLocalRotation().fromAngles(vAngle, hAngle, 0f);
+        distance = clamp(distance + 20 * way * (value(BACK) - value(FORWARD)),
+                MIN_DISTANCE, MAX_DISTANCE);
         gameState.getCameraDistanceNode().setLocalTranslation(0, 0, distance);
     }
 }
