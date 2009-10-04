@@ -52,14 +52,17 @@ import java.io.IOException;
         return tileId;
     }
 
+    @Override
     public void write(JMEExporter ex) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
     public void read(JMEImporter im) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
     public Class<?> getClassTag() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

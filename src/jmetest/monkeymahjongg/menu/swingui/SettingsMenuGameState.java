@@ -55,7 +55,7 @@ public class SettingsMenuGameState  extends JMEDesktopState {
         super(gameSettings.getWidth(), gameSettings.getHeight());
         this.gameSettings = gameSettings;
         GameTaskQueueManager.getManager().update(new Callable<Object>() {
-
+            @Override
             public Object call() throws Exception {
                 initGraphics();
                 return null;
@@ -83,6 +83,7 @@ public class SettingsMenuGameState  extends JMEDesktopState {
         final JButton okButton = new JButton("OK");
         jDesktop.add(okButton);
         okButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ae) {
                 save();
             }
@@ -93,7 +94,7 @@ public class SettingsMenuGameState  extends JMEDesktopState {
         final JButton cancelButton = new JButton("Cancel");
         jDesktop.add(cancelButton);
         cancelButton.addActionListener(new ActionListener() {
-
+            @Override
             public void actionPerformed(ActionEvent ae) {
                 Main.selectMainMenu();
             }
@@ -153,7 +154,7 @@ public class SettingsMenuGameState  extends JMEDesktopState {
      private void setJLabel(String text, Point pos) {
         JDesktopPane jDesktop = getDesktop().getJDesktop();
         JLabel label = new JLabel(text);
-        label.setForeground(Color.white);
+        label.setForeground(Color.black);
         jDesktop.add(label);
         label.setSize(100,20);
         label.setLocation(pos);
@@ -187,7 +188,7 @@ public class SettingsMenuGameState  extends JMEDesktopState {
         desktop.setFocusOwner(optionPane);
 
         optionPane.addPropertyChangeListener(JOptionPane.VALUE_PROPERTY, new PropertyChangeListener() {
-
+            @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 modalDialog.setVisible(false);
                 desktop.setModalComponent(null);

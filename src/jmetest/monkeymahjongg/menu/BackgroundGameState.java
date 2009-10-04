@@ -114,6 +114,7 @@ public class BackgroundGameState extends BasicGameState {
             this.speed = speed;
         }
 
+        @Override
         public void update(float time) {
             if (time < 0.1) {
                 angle += time * speed;

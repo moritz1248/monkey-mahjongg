@@ -36,28 +36,16 @@ public class Coordinate implements Serializable {
     
    private final static long serialVersionUID = 1; 
     
-   private static transient Map<Integer, Map<Integer, Map<Integer, Coordinate>>> map;
+   private static transient Map<String, Coordinate> map = new HashMap<String, Coordinate>();
    
-   private final int x;
-   private final int y;
-   private final int z;
+   public final int x;
+   public final int y;
+   public final int z;
    
    private Coordinate(int x, int y, int z) {
        this.x = x;
        this.y = y;
        this.z = z;
-   }
-   
-   public int getX() {
-       return x;
-   }
-   
-   public int getY() {
-       return y;
-   }
-   
-   public int getZ() {
-       return z;
    }
 
    public Coordinate add(int dx, int dy, int dz) {
@@ -65,31 +53,18 @@ public class Coordinate implements Serializable {
    }
    
    public static Coordinate at(int x, int y, int z) {
-       if (map == null) {
-           map = new HashMap<Integer, Map<Integer, Map<Integer, Coordinate>>>();
+       String key = String.format("%d:%d:%d",x,y,z);
+       Coordinate c = map.get(key);
+       if (c == null) {
+           c = new Coordinate(x,y,z);
+           map.put(key, c);
        }
-       Map<Integer, Map<Integer, Coordinate>> mapX = map.get(x);
-       if (mapX == null) {
-           mapX = new HashMap<Integer, Map<Integer, Coordinate>>();
-           map.put(x, mapX);
-       }
-       Map<Integer, Coordinate> mapY = mapX.get(y);
-       if (mapY == null) {
-           mapY = new HashMap<Integer, Coordinate>();
-           mapX.put(y, mapY);
-       }
-       if (mapY.containsKey(z)) {
-           return mapY.get(z);
-       } else {
-           Coordinate c = new Coordinate(x,y,z);
-           mapY.put(z, c);
-           return c;
-       }
+       return c;
    }
 
    @Override
    public String toString() {
        return String.format("[%d,%d,%d]", x, y, z);
    }
-   
+
 }

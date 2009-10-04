@@ -74,11 +74,13 @@ class CameraController extends Controller {
         return manager.getControl(direction.name()).getValue();
     }
 
+    @Override
     public void update(float time) {
         final float way = SPEED * time;
         hAngle = clamp(hAngle + way * (value(RIGHT) - value(LEFT)), -MIN_ANGLE, MIN_ANGLE);
         vAngle = clamp(vAngle + way * (value(DOWN) - value(UP)), -MIN_ANGLE, MIN_ANGLE);
         gameState.getCameraRotationNode().getLocalRotation().fromAngles(vAngle, hAngle, 0f);
+        gameState.getSkyboxNode().getLocalRotation().fromAngles(0f,-2*hAngle, 0f);
         distance = clamp(distance + 20 * way * (value(BACK) - value(FORWARD)),
                 MIN_DISTANCE, MAX_DISTANCE);
         gameState.getCameraDistanceNode().setLocalTranslation(0, 0, distance);
