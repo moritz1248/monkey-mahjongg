@@ -49,6 +49,7 @@ public class MousePickController extends MahjonggGameController {
         pr.setCheckDistance(true);
     }
 
+    @Override
     public void update(float time) {
         released = (pick.getValue() == 0) ? true : released;
 

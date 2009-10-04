@@ -46,7 +46,7 @@ import static java.util.logging.Level.*;
 public final class LevelProvider {
   
     private final static SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
-
+    private final static Logger logger = Logger.getLogger(LevelProvider.class.getName());
     
     private LevelProvider() {}
     
@@ -63,13 +63,13 @@ public final class LevelProvider {
                              handler.layers, 
                              handler.tiles);
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(LevelProvider.class.getName()).log(SEVERE, null, ex);
+            logger.log(SEVERE, null, ex);
             throw new RuntimeException(ex);
         } catch (IOException ex) {
-            Logger.getLogger(LevelProvider.class.getName()).log(SEVERE, null, ex);
+            logger.log(SEVERE, null, ex);
             throw new RuntimeException(ex);
         } catch (SAXException ex) {
-            Logger.getLogger(LevelProvider.class.getName()).log(SEVERE, null, ex);
+            logger.log(SEVERE, null, ex);
             throw new RuntimeException(ex);
         }      
     }   

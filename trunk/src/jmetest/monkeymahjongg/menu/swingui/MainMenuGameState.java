@@ -54,7 +54,7 @@ public class MainMenuGameState extends JMEDesktopState {
             putValue(NAME, "Settings");
             putValue(SHORT_DESCRIPTION, "Settings Button");
         }
-
+        @Override
         public void actionPerformed(ActionEvent e) {
             Main.selectSettingsMenu();
         }
@@ -68,7 +68,7 @@ public class MainMenuGameState extends JMEDesktopState {
             putValue(NAME, "Start");
             putValue(SHORT_DESCRIPTION, "Starts the game, using the selected layout");
         }
-
+        @Override
         public void actionPerformed(ActionEvent e) {
             Main.startLevel();
         }
@@ -82,7 +82,7 @@ public class MainMenuGameState extends JMEDesktopState {
             putValue(NAME, "Exit");
             putValue(SHORT_DESCRIPTION, "Exits this game");
         }
-
+        @Override
         public void actionPerformed(ActionEvent e) {
             Main.exit();
         }
@@ -104,11 +104,12 @@ public class MainMenuGameState extends JMEDesktopState {
         final JLabel label = new JLabel("Layout:");
         label.setSize(100, 15);
         label.setLocation(50, 280);
-        label.setForeground(Color.white);
+        label.setForeground(Color.black);
         jDesktop.add(label);
         final JList layoutList = new JList(getLayouts());
         layoutList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         layoutList.addListSelectionListener(new ListSelectionListener() {
+            @Override
             public void valueChanged(ListSelectionEvent e) {
                 Main.setLayoutName(layoutList.getSelectedValue().toString().toLowerCase());
             }

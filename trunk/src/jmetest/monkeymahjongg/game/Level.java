@@ -35,10 +35,10 @@ import java.util.logging.Logger;
  */
 public class Level {
 
-    private final String name;
-    private final int width;
-    private final int height;
-    private final int layers;
+    public final String name;
+    public final int width;
+    public final int height;
+    public final int layers;
     private final Map<Coordinate, TileData> tiles;
     private Geometry selectedGeometry;
 
@@ -139,22 +139,5 @@ public class Level {
     TileData getTile(Coordinate c) {
         return tiles.get(c);
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getLayers() {
-        return layers;
-    }
-
 
 }
